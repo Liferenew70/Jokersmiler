@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offre Spéciale - La Boîte à Outils EXE par Joker</title>
+    <link rel="shortcut icon" href="/Tunel de vente/fav/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0D9488; --secondary: #0F766E; --accent: #F59E0B;
+            --accent-light: #FBBF24; --light: #f8f9fa; --dark: #111827;
+            --surface: #1F2937; --success: #10B981;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, var(--dark) 0%, #000000 100%); color: var(--light); line-height: 1.7; overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        header { text-align: center; padding: 2rem 0; }
+        .logo {
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .tagline { font-size: 1.1rem; opacity: 0.85; max-width: 800px; margin: 0 auto; }
+        .hero-section { display: flex; align-items: center; gap: 3rem; margin: 3rem 0; flex-wrap: wrap; }
+        .hero-text { flex: 1; min-width: 300px; }
+        .hero-image { flex: 1; min-width: 300px; text-align: center; }
+        .mockup-image {
+            max-width: 100%; border-radius: 15px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 5px solid rgba(255, 255, 255, 0.1);
+        }
+        .benefits-section { background: var(--surface); border-radius: 20px; padding: 2.5rem; margin: 4rem 0; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .section-title {
+            text-align: center; font-size: 2.2rem; margin-bottom: 2.5rem;
+            position: relative; display: inline-block; left: 50%;
+            transform: translateX(-50%);
+        }
+        .section-title:after {
+            content: ""; position: absolute; bottom: -10px; left: 20%;
+            width: 60%; height: 4px; border-radius: 2px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+        }
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .benefit-card { background: rgba(0, 0, 0, 0.2); border-radius: 15px; padding: 1.8rem; border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
+        .benefit-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .benefit-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.8rem; }
+        .cta-section { background: white; color: var(--dark); border-radius: 20px; padding: 3rem; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin: 4rem 0; position: relative; overflow: hidden; border: 5px solid var(--accent); }
+        .price-box { display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
+        .current-price { font-size: 3.5rem; font-weight: 800; color: var(--primary); }
+        .original-price { text-decoration: line-through; opacity: 0.7; font-size: 2rem; color: #666; }
+        .countdown { background: rgba(245, 158, 11, 0.1); border-radius: 10px; padding: 1rem 2rem; display: inline-block; margin: 1.5rem 0; font-weight: 600; border: 2px dashed var(--accent); }
+        .countdown-title { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .countdown-timer { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+        .action-buttons { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin: 2rem 0; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 0.8rem; color: white; padding: 1.2rem 2.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1.2rem; transition: all 0.3s ease; border: none; cursor: pointer; min-width: 280px; }
+        .btn-main { background: linear-gradient(to right, var(--primary), var(--secondary)); box-shadow: 0 5px 15px rgba(13, 148, 136, 0.4); }
+        .btn-whatsapp { background: linear-gradient(to right, #25D366, #128C7E); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
+        .btn:hover { transform: translateY(-3px); }
+        .guarantee { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; color: #555; font-weight: 500; }
+        .guarantee-icon { color: var(--success); font-size: 1.8rem; }
+        footer { text-align: center; padding: 2rem; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; opacity: 0.7; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">LA BOÎTE À OUTILS EXE</div>
+            <p class="tagline">La suite d'applications portables qui automatise vos tâches numériques, développée par Joker.</p>
+        </header>
+
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Arrêtez de perdre votre temps avec des tâches répétitives.<br><span style="color: var(--accent);">Devenez 10x plus productif dès aujourd'hui.</span></h1>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">J'ai passé plus de 3 mois à développer et compiler ces outils pour résoudre des problèmes concrets que nous rencontrons tous. Pas d'installation, pas de configuration complexe : vous exécutez et c'est tout.</p>
+            </div>
+            
+            <div class="hero-image">
+                <!-- IMPORTANT : Remplacez ce lien par une capture d'écran de votre dossier ou de vos outils -->
+                <img src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Mockup de la Boîte à Outils EXE" class="mockup-image pulse">
+            </div>
+        </section>
+
+        <section class="benefits-section">
+            <h2 class="section-title">Ce que contient la Boîte à Outils</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                    <h3 class="benefit-title">Rclone Telechargeur</h3>
+                    <p>Téléchargez des fichiers Google Drive de plusieurs Go sans la limite de compression .zip. Indispensable.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-link"></i></div>
+                    <h3 class="benefit-title">Analyseur de Liens GDrive</h3>
+                    <p>Vérifiez la validité de centaines de liens en quelques secondes et obtenez deux listes : valides et invalides.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3 class="benefit-title">Extracteurs de Liens PDF</h3>
+                    <p>Extrayez toutes les URLs d'un PDF, qu'elles soient visibles ou cachées dans du texte, en deux modes (simple et complet).</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-cogs"></i></div>
+                    <h3 class="benefit-title">Convertisseur PY en EXE</h3>
+                    <p>Transformez vos propres scripts Python en applications portables Windows, sans dépendances.</p>
+                </div>
+                 <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-eye-slash"></i></div>
+                    <h3 class="benefit-title">FiltreImage</h3>
+                    <p>Scannez et triez vos dossiers d'images. Isolez automatiquement les contenus sensibles pour une modération rapide.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-star"></i></div>
+                    <h3 class="benefit-title">Globale Tools (Beta)</h3>
+                    <p>Accédez à plusieurs fonctions en une seule interface légère pour des actions rapides.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2 style="font-size: 2.2rem; margin-bottom: 1rem; color: var(--dark);">Offre de Lancement Irrésistible</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: #555;">Obtenez un accès à vie à tous ces outils pour :</p>
+            
+            <div class="price-box">
+                <div class="current-price">7 000 FCFA</div>
+                <div class="original-price">15 000 FCFA</div>
+            </div>
+            
+            <div class="countdown">
+                <div class="countdown-title">Cette offre à plus de -50% se termine dans :</div>
+                <div class="countdown-timer" id="countdown">4:00:00:00</div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="https://shopingjasmith.netlify.app/" target="_blank" class="btn btn-main">
+                    <i class="fas fa-shopping-cart"></i> Voir ma boutique en ligne
+                </a>
+                <a href="https://wa.me/2250595762779?text=Bonjour%20Joker%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Bo%C3%AEte%20%C3%A0%20Outils%20EXE." target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Commander via WhatsApp
+                </a>
+            </div>
+            
+            <p style="margin-top: 1.5rem; font-size: 1rem; color: #555;">
+                Vous pouvez aussi me contacter directement via Telegram : <strong><a href="https://t.me/Joker_smiler" target="_blank" style="color:var(--dark);">@Joker_smiler</a></strong><br>
+                ou par mail : <strong><a href="mailto:es2iprompter@gmail.com" style="color:var(--dark);">es2iprompter@gmail.com</a></strong>
+            </p>
+            
+            <div class="guarantee">
+                <i class="fas fa-shield-alt guarantee-icon"></i>
+                <p>Paiement unique | Accès à vie | Mises à jour incluses</p>
+                <p>Présentation des outils <a href="../JokersmilerTools/index.html" target="_blank" style="font-weight: bold; color:blueviolet;">Joker Tool's</a></p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2025 Joker - Tous droits réservés</p>
+    </footer>
+
+    <script>
+        function startCountdown() {
+            // Durée de 4 jours
+            let countdown = 4 * 24 * 60 * 60; 
+            const countdownEl = document.getElementById('countdown');
+            if (!countdownEl) return;
+            const timer = setInterval(() => {
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    document.querySelector('.current-price').textContent = "15 000 FCFA";
+                    document.querySelector('.original-price').style.display = 'none';
+                    countdownEl.innerHTML = "<span style='font-size:1.2rem'>Offre de lancement terminée !</span>";
+                    return;
+                }
+                const days = Math.floor(countdown / (3600 * 24));
+                const hours = Math.floor((countdown % (3600 * 24)) / 3600);
+                const minutes = Math.floor((countdown % 3600) / 60);
+                const seconds = countdown % 60;
+                countdownEl.textContent = `${days}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                countdown--;
+            }, 1000);
+        }
+        window.onload = startCountdown;
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormationPro - Informations de Livraison</title>
+    
+    <!-- Polices pour le nouveau design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">FormationPro</a>
+        <nav class="nav-links">
+             <!-- Header simplifié pour le processus de paiement -->
+             <ul>
+                <li><a href="panier.html" style="font-weight: bold;"><i class="fas fa-arrow-left"></i> Retour au panier</a></li>
+            </ul>
+        </nav>
+        <div class="header-user-info">
+             <div class="user-id-container">
+                <span id="user-id-display"></span>
+                <button id="copy-user-id-btn" title="Copier mon ID client"><i class="fas fa-copy"></i></button>
+            </div>
+            <button id="theme-switcher" class="theme-switcher" title="Changer de thème">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <form id="delivery-form" class="form-container" novalidate>
+            <h1>Informations pour la réception</h1>
+            <p>Remplissez ces informations pour que nous puissions vous identifier après le paiement.</p>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstname">Prénom</label>
+                    <input type="text" id="firstname" name="firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Nom</label>
+                    <input type="text" id="lastname" name="lastname" required>
+                </div>
+            </div>
+
+            <fieldset class="delivery-methods-group">
+                <legend>Méthodes de contact</legend>
+                <p class="form-note">Veuillez renseigner au moins l'un des champs ci-dessous pour que nous puissions vous envoyer vos formations.</p>
+                
+                <div class="delivery-method">
+                    <i class="fab fa-whatsapp"></i>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="Numéro WhatsApp (ex: +2250102030405)">
+                </div>
+                <div class="delivery-method">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="gmail" name="gmail" placeholder="Adresse E-mail">
+                </div>
+                <div class="delivery-method">
+                    <i class="fab fa-telegram-plane"></i>
+                    <input type="text" id="telegram" name="telegram" placeholder="Pseudo Telegram (ex: @pseudo)">
+                </div>
+            </fieldset>
+
+            <button type="submit" id="submit-delivery-form" class="btn btn-primary" disabled>
+                Confirmer et choisir le paiement
+            </button>
+        </form>
+    </main>
+
+    <footer class="footer">
+         <div class="footer-bottom">
+            <p>© 2024 FormationPro. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <div id="alert-container"></div>
+
+    <script src="js/helpers.js"></script>
+    <!-- ==================== CONFIGURATION FIREBASE ==================== -->
+<!-- Ces deux lignes chargent les outils Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+
+<script>
+  // Votre configuration personnelle pour connecter le site à VOTRE base de données
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlNMmxqt8q02cWkNSzqhlvinpdWQdDlpQ",
+    authDomain: "premierbaseenligne.firebaseapp.com",
+    projectId: "premierbaseenligne",
+    storageBucket: "premierbaseenligne.firebasestorage.app",
+    messagingSenderId: "140504477122",
+    appId: "1:140504477122:web:6cf7622c6ff57ffb21ba5b"
+  };
+
+  // Initialise la connexion à Firebase et à la base de données Firestore
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(); // Notre variable pour interagir avec la base de données
+</script>
+<!-- =============================================================== -->
+    <script src="js/app.js"></script>
+    
+    <!-- SCRIPT CORRIGÉ POUR LE TUNNEL DE PAIEMENT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Redirige si le panier est vide ou si aucun article n'est sélectionné
+            if (getCartDetails().selectedItemCount === 0) {
+                showAlert('Votre panier est vide ou aucun article n\'est sélectionné.', 'danger');
+                setTimeout(() => window.location.href = 'panier.html', 2000);
+                return;
+            }
+
+            const form = document.getElementById('delivery-form');
+            const submitBtn = document.getElementById('submit-delivery-form');
+            const requiredFields = form.querySelectorAll('[required]');
+            const deliveryMethodInputs = Array.from(form.querySelectorAll('.delivery-method input'));
+
+            // Validation du formulaire en temps réel
+            function validateForm() {
+                const isRequiredValid = Array.from(requiredFields).every(f => f.value.trim() !== '');
+                const isDeliveryValid = deliveryMethodInputs.some(i => i.value.trim() !== '');
+                submitBtn.disabled = !(isRequiredValid && isDeliveryValid);
+            }
+
+            form.addEventListener('input', validateForm);
+            validateForm();
+
+            // Logique de soumission du formulaire
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // ÉTAPE 1: Sauvegarde de la commande pour l'admin
+                saveOrderForAdmin();
+
+                // ÉTAPE 2: Afficher la modale de choix de paiement
+                const cartDetails = getCartDetails();
+                const paymentMethodIsWave = await showConfirmation(
+                    'Choisir une méthode de paiement',
+                    `Votre total est de ${formatPrice(cartDetails.grandTotal)}. Comment souhaitez-vous payer ?`,
+                    { confirmText: 'Payer via Wave', cancelText: 'Payer par WhatsApp', confirmClass: 'btn-wave', cancelClass: 'btn-whatsapp' }
+                );
+
+                // ÉTAPE 3: Redirection en fonction du choix
+                sessionStorage.setItem('paymentRedirect', 'pending'); // Marqueur pour la page de retour
+                if (paymentMethodIsWave) { // Wave a été choisi
+                    const waveUrl = `https://pay.wave.com/m/M_ci_oy0G6bGRkVcG/c/ci/?amount=${cartDetails.grandTotal}`;
+                    window.location.href = waveUrl;
+                } else { // WhatsApp a été choisi
+                    const selectedProducts = cartDetails.items.filter(item => item.selected);
+                    let whatsappMessage = `*Bonjour, je souhaite commander :*\n\n`;
+                    selectedProducts.forEach(p => {
+                        whatsappMessage += `- ${p.title} (x${p.quantity}): ${formatPrice(p.prixPromo * p.quantity)}\n`;
+                        if(p.fees > 0) whatsappMessage += `  (Frais: ${formatPrice(p.fees * p.quantity)})\n`;
+                    });
+                    whatsappMessage += `\n*TOTAL : ${formatPrice(cartDetails.grandTotal)}*`;
+                    whatsappMessage += `\n\n*Mes infos pour la livraison :*\nPrénom: ${form.elements.firstname.value}\nNom: ${form.elements.lastname.value}`;
+                    
+                    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+                    window.location.href = whatsappUrl;
+                }
+            });
+
+            // Fonction CORRIGÉE pour sauvegarder la commande dans la BONNE base de données
+            function saveOrderForAdmin() {
+                const cartDetails = getCartDetails();
+                const selectedProducts = cartDetails.items.filter(item => item.selected);
+                
+                // Gestion du parrainage
+                handleReferralOnPurchase(selectedProducts, cartDetails.grandTotal);
+
+                // Création de l'objet commande avec le statut "pending"
+                const newOrder = {
+                    id: crypto.randomUUID(), // Ajout d'un ID unique à la commande
+                    idClient: getOrGenerateUserId(),
+                    clientName: `${form.elements.firstname.value} ${form.elements.lastname.value}`,
+                    date: new Date().toISOString(),
+                    products: selectedProducts.map(p => ({
+                        id: p.id, name: p.title, price: p.prixPromo, fees: p.fees, quantity: p.quantity
+                    })),
+                    deliveryInfo: {
+                        whatsapp: form.elements.whatsapp.value, 
+                        telegram: form.elements.telegram.value,
+                        gmail: form.elements.gmail.value
+                    },
+                    totalPrice: cartDetails.grandTotal,
+                    status: "pending"
+                };
+
+                // Sauvegarde dans LA NOUVELLE base de données 'adminDatabase'
+                let db = JSON.parse(localStorage.getItem('adminDatabase')) || { pending: [], history: [] };
+                db.pending.push(newOrder);
+                localStorage.setItem('adminDatabase', JSON.stringify(db));
+                showAlert('Commande enregistrée. Redirection vers le paiement...', 'success');
+            }
+            
+            // Gère le retour de l'utilisateur depuis Wave ou WhatsApp
+            window.addEventListener('pageshow', async (event) => {
+                if (sessionStorage.getItem('paymentRedirect') === 'pending') {
+                    sessionStorage.removeItem('paymentRedirect');
+                    const confirmed = await showConfirmation('Paiement effectué ?', 'Avez-vous bien finalisé le paiement sur la page précédente ?', {confirmText: '✅ Oui', cancelText: '❌ Non', confirmClass: 'btn-success'});
+                    if (confirmed) {
+                        emptyCart();
+                        window.location.href = 'wavebuy.html';
+                    } else {
+                        showAlert('Votre commande reste en attente.', 'info');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

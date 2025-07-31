@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Analysez rapidement les liens Google Drive pour identifier ceux qui sont valides et ceux qui ne le sont pas. Téléchargez l'application et commencez à optimiser vos ressources dès maintenant.">
+    <title>Analyseur de Liens Google Drive | La Boîte à Outils EXE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="./fav/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a12; --primary: #1a1a2e; --secondary: #16213e; --accent: #00ff88;
+            --accent-dark: #00cc6a; --text-main: #e0e0e0; --text-dim: #a0a0a0;
+            --danger: #ff3860; --success: #3fb950; --border: #2a2a3a;
+            --glow: 0 0 15px rgba(0, 255, 136, 0.2); --font-main: 'JetBrains Mono', monospace;
+            --font-display: 'Share Tech Mono', monospace; --nav-height: 70px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main); background-color: var(--bg-dark); color: var(--text-main);
+            line-height: 1.7; overflow-x: hidden; padding-top: var(--nav-height);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 255, 136, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(0, 255, 136, 0.05) 0%, transparent 30%);
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Navigation */
+        .main-navigation { position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height); background-color: rgba(10, 10, 18, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .nav-logo a { font-family: var(--font-display); font-size: 1.5rem; color: var(--accent); text-decoration: none; }
+        .main-nav ul { display: flex; gap: 2rem; list-style: none; }
+        .main-nav a { color: var(--text-dim); text-decoration: none; font-size: 1rem; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--accent); }
+
+        /* Header */
+        .site-header { padding: 6rem 0; text-align: center; }
+        .site-header h1 { font-family: var(--font-display); font-size: 3.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .site-header h1 .blink { animation: blink 1s infinite; }
+        .site-header .subtitle { font-size: 1.5rem; color: var(--text-main); margin-bottom: 2rem; }
+        .site-header p { font-size: 1.1rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 2.5rem; }
+        .btn { padding: 1rem 2rem; background: var(--accent); color: var(--bg-dark); border: none; border-radius: 4px; font-family: var(--font-main); font-weight: bold; font-size: 1.1rem; cursor: pointer; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; }
+        .btn:hover { background: var(--accent-dark); box-shadow: var(--glow); transform: translateY(-3px); }
+
+        /* Sections */
+        .section { padding: 5rem 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .section:last-of-type { border-bottom: none; }
+        .section.visible { opacity: 1; transform: translateY(0); }
+        .section-title { font-family: var(--font-display); font-size: 2.5rem; text-align: center; margin-bottom: 3rem; color: var(--accent); }
+        .section-title::before { content: "// "; color: var(--text-dim); }
+
+        /* Grids and Cards */
+        .grid-problem-solution { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .card { background: var(--primary); padding: 2rem; border-left: 3px solid var(--border); border-radius: 4px; }
+        .card h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .card.problem h3 { color: var(--danger); }
+        .card.solution h3 { color: var(--success); }
+        .card ul { list-style: none; padding-left: 1rem; }
+        .card li { margin-bottom: 0.75rem; position: relative; }
+        .card li::before { font-family: "Font Awesome 5 Free"; font-weight: 900; position: absolute; left: -1.5rem; }
+        .card.problem li::before { content: '\f00d'; color: var(--danger); }
+        .card.solution li::before { content: '\f00c'; color: var(--success); }
+
+        /* How-to steps */
+        .steps-container { display: flex; flex-direction: column; gap: 2rem; }
+        .step { background: var(--primary); padding: 1.5rem 2rem; border-radius: 4px; display: flex; align-items: center; gap: 2rem; border: 1px solid var(--border); }
+        .step-number { font-size: 3rem; font-weight: bold; color: var(--accent); font-family: var(--font-display); }
+        .step-content h4 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); }
+        .step-content p { color: var(--text-dim); }
+        code { background-color: var(--secondary); color: var(--accent); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.9em; }
+
+        /* Footer */
+        .super-footer { background-color: var(--bg-dark); padding: 4rem 0 2rem; border-top: 1px solid var(--border); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-nav { display: none; }
+            .site-header h1 { font-size: 2.5rem; }
+            .grid-problem-solution { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-navigation">
+        <div class="nav-container">
+            <!-- Remplacez 'index.html' par le lien vers votre page principale -->
+            <div class="nav-logo"><a href="index.html">La Boîte à Outils</a></div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#problem">Problème/Solution</a></li>
+                    <li><a href="#how-it-works">Tutoriel</a></li>
+                    <li>
+                        <a href="./PDFextrator/index.html" target="_blank" onclick="if(!confirm('Voulez-vous accéder à l’outil d’extraction de liens depuis les fichiers PDF ?')) return false;">
+                            PdfLinkExtractor
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="site-header">
+        <div class="container">
+            <h1>Analyseur de Liens GDrive<span class="blink">_</span></h1>
+            <h2 class="subtitle">Le validateur de liens Google Drive ultime.</h2>
+            <p>
+                Ne perdez plus de temps à vérifier des listes de liens. Notre application automatise la vérification et trie pour vous les liens valides des liens morts en quelques secondes.
+            </p>
+             <!-- Bouton qui mène vers la page principale pour le téléchargement -->
+            <a href="/RcloneTelechargeur/tuto/portail/tuneling.html" class="btn">
+                <i class="fas fa-download"></i>
+                Télécharger la Suite Complète
+            </a>
+        </div>
+    </div>
+
+    <main class="container">
+
+        <section class="section" id="problem">
+            <h2 class="section-title">Le Problème & Notre Solution</h2>
+            <div class="grid-problem-solution">
+                <div class="card problem">
+                    <h3><i class="fas fa-exclamation-triangle"></i>La corvée manuelle</h3>
+                    <ul>
+                        <li>Vérifier un par un des centaines de liens Google Drive est une perte de temps considérable.</li>
+                        <li>Les liens supprimés ou à accès restreint polluent vos listes de ressources.</li>
+                        <li>Impossible de savoir quels liens sont encore actifs sans tous les ouvrir.</li>
+                    </ul>
+                </div>
+                <div class="card solution">
+                    <h3><i class="fas fa-rocket"></i>La Solution Exécutable</h3>
+                     <ul>
+                        <li>Une application <strong>autonome (.exe)</strong> qui ne requiert aucune installation.</li>
+                        <li>Analyse en masse le fichier texte contenant tous vos liens.</li>
+                        <li>Crée automatiquement deux fichiers de sortie : <code>liens_valides.txt</code> et <code>liens_invalides.txt</code>.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+            <h2 class="section-title">Comment l'utiliser ?</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h4>Localisez l'Application</h4>
+                        <p>Naviguez vers le dossier <code>MES APPLICATION EXE/analyseur de lien gogole drive/dist/</code>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h4>Préparez vos liens</h4>
+                        <p>Créez un fichier texte (ex: <code>mes_liens.txt</code>) et collez-y tous les liens Google Drive à vérifier, un par ligne.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h4>Lancez l'Application</h4>
+                        <p>Double-cliquez sur le fichier <code>.exe</code>. Une fenêtre de terminal s'ouvrira pour vous guider.</p>
+                    </div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h4>Récupérez les Résultats</h4>
+                        <p>L'application va analyser vos liens et créer deux nouveaux fichiers dans le même dossier : <code>liens_valides.txt</code> et <code>liens_invalides.txt</code>. C'est tout !</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="super-footer">
+        <div class="container footer-bottom">
+             <p>© 2025 - La Boîte à Outils EXE par Joker. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation de défilement pour les sections
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            if(!sections.length) return;
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Analysez l'historique de vos liens pour identifier les sites visités, les doublons et les liens valides. Téléchargez l'application et commencez à optimiser vos ressources dès maintenant.">
+    <meta name="keywords" content="analyse, historique, liens, doublons, sites visités, optimisation">
+    <meta name="author" content="Toure D. Junior">
+    <meta property="og:image" content="https://ibb.co/0j0VSFjJ">
+    <link rel="shortcut icon" href="favicon/favicon.ico" type="image/x-icon">
+    <title>Tableau de Bord d'Analyse - Historique</title>
+    
+    <!-- Ajout de la bibliothèque jsPDF depuis un CDN pour l'export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        /* === Configuration Globale et Variables CSS === */
+        :root {
+            --orange: #fd7e14;
+            --white: #FFFFFF;
+            --green: #20c997;
+            --dark-green: #1a9c7d;
+            --light-gray: #f8f9fa;
+            --dark-gray: #212529;
+            --medium-gray: #dee2e6;
+            --blue: #0d6efd;
+            --red: #dc3545;
+            --header-bg: #212529;
+            --shadow: rgba(0, 0, 0, 0.075);
+        }
+
+        /* === Reset et Styles de Base === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-wrap {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--orange);
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 25px var(--shadow);
+            padding: 2rem;
+        }
+
+        /* === Section d'Upload === */
+        #upload-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #upload-box {
+            flex-basis: 250px;
+            flex-grow: 1;
+        }
+
+        #file-info-panel {
+            flex-basis: 300px;
+            flex-grow: 10;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1.25rem;
+            background-color: var(--light-gray);
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+        }
+
+        #file-info-panel span {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        #file-info-panel .info-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: block;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, var(--orange), #ff9500);
+            color: var(--white);
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+
+        .file-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.4);
+            border-color: #ffc107;
+        }
+
+        /* === Section d'Analyse et Contrôles === */
+        #analysis-controls {
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        #global-search-bar {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .control-group button,
+        .control-group select {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--light-gray);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .control-group button.active {
+            background-color: var(--dark-green);
+            color: var(--white);
+        }
+        
+        #export-section {
+            background-color: var(--light-gray);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid var(--medium-gray);
+        }
+
+        /* === Zone de Résultats === */
+        .results-area h3 {
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--orange);
+            padding-bottom: 0.5rem;
+        }
+
+        .results-area table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .results-area th,
+        .results-area td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        .results-area th {
+            background-color: #f2f2f2;
+        }
+
+        .results-area a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .results-area a:hover {
+            text-decoration: underline;
+        }
+
+        /* === Pagination === */
+        #pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
+        #pagination button {
+            background-color: var(--blue);
+            color: var(--white);
+            border: none;
+            font-weight: 600;
+            border-radius: 5px;
+            padding: 0.6rem 1.2rem;
+            transition: background-color 0.2s ease;
+        }
+
+        #pagination button:hover:not(:disabled) {
+            background-color: #0b5ed7;
+        }
+
+        #pagination button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #page-input {
+            width: 70px;
+            text-align: center;
+            font-size: 1rem;
+            padding: 0.6rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: 5px;
+        }
+
+        /* === Alertes Stylisées === */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            min-width: 300px;
+        }
+
+        .alert.fade-out {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .alert-success { background-color: var(--green); }
+        .alert-info { background-color: var(--blue); }
+        .alert-error { background-color: var(--red); }
+
+
+        .hidden {
+            display: none;
+        }
+
+        /* === Footer === */
+        footer {
+            background-color: var(--header-bg);
+            color: #adb5bd;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--green);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        footer a:hover {
+            background-color: var(--green);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <div id="alert-container"></div>
+    <div class="page-container">
+        <header>
+            <h1>Tableau de Bord d'Analyse d'Historique</h1>
+        </header>
+
+        <main class="content-wrap">
+            <div class="container">
+                <div id="upload-container">
+                    <div id="upload-box">
+                        <input type="file" id="fileInput" class="file-input" accept=".json">
+                        <label for="fileInput" class="file-label" id="file-label">Importer le fichier Json</label>
+                    </div>
+                    <div id="file-info-panel" class="hidden"></div>
+                </div>
+
+                <div id="analysis-section" class="hidden">
+                    <div id="analysis-controls">
+                        <input type="search" id="global-search-bar" placeholder="🔍 Rechercher dans tout l'historique...">
+                        <div class="control-group">
+                            <button data-view="list" class="active">Liste Complète</button>
+                            <button data-view="grouped">Grouper par Site</button>
+                            <button data-view="visited">Sites les Plus Visités</button>
+                            <button data-view="duplicates">Voir les Doublons</button>
+                        </div>
+                        <div class="control-group">
+                            <label>Trier par :</label>
+                            <select id="sortSelect"></select>
+                        </div>
+                    </div>
+                    <div class="results-area"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <h3>Besoin d'aide pour avoir le fichier des historiques ? <a href="#" onclick="alert(`Pas de tuto Youtube trouver`)">Tutoriel Youtube</a></h3><br>
+            <a href="https://wa.me/+2250719030672" target="_blank" style="margin-top: 1rem; display: inline-block; margin-right: 1rem;">Contactez l'admin</a>
+            <a href="../TousMesSites/index.html" target="_blank" style="margin-top: 1rem; display: inline-block;">Tous mes sites</a>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- ÉTAT GLOBAL DE L'APPLICATION ---
+            const state = {
+                allHistory: [],
+                currentView: 'list',
+                currentSort: 'date_desc',
+                searchTerm: '',
+                currentPage: 1,
+                itemsPerPage: 100
+            };
+
+            // --- RÉFÉRENCES AUX ÉLÉMENTS DU DOM ---
+            const DOMElements = {
+                fileInput: document.getElementById('fileInput'),
+                fileLabel: document.getElementById('file-label'),
+                fileInfoPanel: document.getElementById('file-info-panel'),
+                analysisSection: document.getElementById('analysis-section'),
+                resultsArea: document.querySelector('.results-area'),
+                sortSelect: document.getElementById('sortSelect'),
+                globalSearchBar: document.getElementById('global-search-bar'),
+                alertContainer: document.getElementById('alert-container')
+            };
+            
+            // --- FONCTION D'INITIALISATION ---
+            function init() {
+                const storedHistory = sessionStorage.getItem('fullHistory');
+                if (storedHistory) {
+                    state.allHistory = JSON.parse(storedHistory);
+                    const storedFileMeta = JSON.parse(sessionStorage.getItem('fileMeta'));
+                    if (storedFileMeta) displayFileStats(storedFileMeta);
+                    showAnalysisSection();
+                    render();
+                }
+                
+                DOMElements.fileInput.addEventListener('change', handleFileUpload);
+                DOMElements.analysisSection.addEventListener('click', handleControlsClick);
+                DOMElements.sortSelect.addEventListener('change', handleSortChange);
+                DOMElements.globalSearchBar.addEventListener('input', debounce(handleSearch, 300));
+                
+                DOMElements.resultsArea.addEventListener('change', handlePaginationInputChange);
+                DOMElements.resultsArea.addEventListener('keydown', handlePaginationInputKeydown);
+                DOMElements.resultsArea.addEventListener('click', handlePaginationButtonClick);
+            }
+
+            // --- FONCTIONS UTILITAIRES ET D'AFFICHAGE ---
+            const showAnalysisSection = () => DOMElements.analysisSection.classList.remove('hidden');
+
+            function displayFileStats(fileMeta) {
+                DOMElements.fileLabel.textContent = "Choisir un autre fichier";
+                DOMElements.fileInfoPanel.innerHTML = `
+                    <div><span class="info-label">Nom</span><span>${fileMeta.name}</span></div>
+                    <div><span class="info-label">Format</span><span>${fileMeta.format.toUpperCase()}</span></div>
+                    <div><span class="info-label">Taille</span><span>${fileMeta.size}</span></div>
+                    <div><span class="info-label">Entrées</span><span>${fileMeta.totalEntries.toLocaleString('fr-FR')}</span></div>
+                    <div><span class="info-label">Début</span><span>${fileMeta.startDate}</span></div>
+                    <div><span class="info-label">Fin</span><span>${fileMeta.endDate}</span></div>`;
+                DOMElements.fileInfoPanel.classList.remove('hidden');
+            }
+            
+            function showAlert(message, type = 'info', duration = 3000) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+                DOMElements.alertContainer.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.classList.add('fade-out');
+                    alertDiv.addEventListener('transitionend', () => alertDiv.remove());
+                }, duration);
+            }
+
+            // --- LOGIQUE DE TRAITEMENT DES DONNÉES ---
+            function processData() {
+                let data = state.searchTerm 
+                    ? state.allHistory.filter(item => JSON.stringify(item).toLowerCase().includes(state.searchTerm.toLowerCase()))
+                    : [...state.allHistory];
+
+                const isGroupedView = ['grouped', 'visited', 'duplicates'].includes(state.currentView) && !state.searchTerm;
+                if (isGroupedView) {
+                    const key = state.currentView === 'duplicates' ? 'url' : 'domain';
+                    data = Object.entries(groupDataBy(data, key));
+                    if (state.currentView === 'duplicates') {
+                        data = data.filter(([, count]) => count > 1);
+                    }
+                }
+                data.sort(getSortFunction(Array.isArray(data[0])));
+                return data;
+            }
+
+            // --- FONCTIONS DE RENDU ---
+            function render() {
+                updateSortOptions();
+                DOMElements.resultsArea.innerHTML = '';
+                
+                document.querySelectorAll('#analysis-controls button[data-view]').forEach(b => b.classList.remove('active'));
+                document.querySelector(`#analysis-controls button[data-view="${state.currentView}"]`).classList.add('active');
+
+                const processedData = processData();
+                const isListView = state.currentView === 'list' || state.searchTerm;
+
+                if (isListView) {
+                    renderPaginatedList(processedData);
+                } else {
+                    const headers = state.currentView === 'duplicates' ? ['URL Dupliquée', 'Occurrences'] : ['Site Web', 'Nombre de Visites'];
+                    renderTable(processedData, headers);
+                }
+            }
+
+            function renderTable(data, headers) {
+                if (data.length === 0) {
+                    DOMElements.resultsArea.innerHTML = '<h3>Aucun résultat.</h3>';
+                    renderExportSection([]);
+                    return;
+                }
+                
+                DOMElements.resultsArea.innerHTML = `<h3>${headers[0]} (${data.length.toLocaleString('fr-FR')})</h3>`;
+                const table = document.createElement('table');
+                table.innerHTML = `<thead><tr><th>${headers[0]}</th><th style="width: 20%;">${headers[1]}</th></tr></thead>`;
+                const tbody = document.createElement('tbody');
+
+                data.slice(0, 1000).forEach(([value, count]) => {
+                    const tr = document.createElement('tr');
+                    let url = value;
+                    try { new URL(url); } catch { url = `http://${url}`; }
+                    tr.innerHTML = `<td><a href="${url}" target="_blank" rel="noopener noreferrer">${value}</a></td><td>${count.toLocaleString('fr-FR')}</td>`;
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                DOMElements.resultsArea.appendChild(table);
+                renderExportSection(data);
+            }
+            
+            function renderPaginatedList(data) {
+                const totalItems = data.length;
+                DOMElements.resultsArea.innerHTML = `<h3>Résultats (${totalItems.toLocaleString('fr-FR')})</h3>`;
+                if (totalItems === 0) {
+                    renderExportSection([]);
+                    return;
+                }
+
+                const table = document.createElement('table');
+                table.innerHTML = '<thead><tr><th style="width: 35%;">Titre</th><th>URL</th><th style="width: 20%;">Date</th></tr></thead>';
+                const tbody = document.createElement('tbody');
+                
+                const start = (state.currentPage - 1) * state.itemsPerPage;
+                const paginatedItems = data.slice(start, start + state.itemsPerPage);
+
+                paginatedItems.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const title = item.title || 'N/A';
+                    const url = item.url || '#';
+                    const date = item.time_usec ? new Date(item.time_usec / 1000).toLocaleString('fr-FR') : 'N/A';
+                    tr.innerHTML = `<td>${title}</td><td><a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a></td><td>${date}</td>`;
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                DOMElements.resultsArea.appendChild(table);
+                renderPagination(totalItems);
+                renderExportSection(data);
+            }
+
+            function renderPagination(totalItems) {
+                const totalPages = Math.ceil(totalItems / state.itemsPerPage);
+                if (totalPages <= 1) return;
+
+                const paginationDiv = document.createElement('div');
+                paginationDiv.id = 'pagination';
+                paginationDiv.innerHTML = `
+                    <button ${state.currentPage === 1 ? 'disabled' : ''} data-page="${state.currentPage - 1}">‹ Précédent</button>
+                    <span>Page <input type="number" id="page-input" value="${state.currentPage}" min="1" max="${totalPages}"> sur ${totalPages.toLocaleString('fr-FR')}</span>
+                    <button ${state.currentPage === totalPages ? 'disabled' : ''} data-page="${state.currentPage + 1}">Suivant ›</button>`;
+                DOMElements.resultsArea.appendChild(paginationDiv);
+            }
+
+            function updateSortOptions() {
+                const isGroupedView = ['grouped', 'visited', 'duplicates'].includes(state.currentView) && !state.searchTerm;
+                const options = isGroupedView 
+                    ? `<option value="count_desc">Nombre (décroissant)</option><option value="count_asc">Nombre (croissant)</option><option value="name_asc">Nom (A-Z)</option><option value="name_desc">Nom (Z-A)</option>`
+                    : `<option value="date_desc">Date (plus récent)</option><option value="title_asc">Titre (A-Z)</option><option value="url_asc">URL (A-Z)</option>`;
+                
+                DOMElements.sortSelect.innerHTML = options;
+                DOMElements.sortSelect.value = state.currentSort;
+            }
+            
+            function renderExportSection(data) {
+                const exportDiv = document.createElement('div');
+                exportDiv.id = 'export-section';
+                exportDiv.innerHTML = `
+                    <h4>Exporter la vue actuelle (${data.length.toLocaleString('fr-FR')} éléments)</h4>
+                    <div class="control-group" id="export-buttons">
+                        <button data-format="txt">TXT</button>
+                        <button data-format="json">JSON</button>
+                        <button data-format="csv">CSV</button>
+                        <button data-format="html">HTML</button>
+                        <button data-format="pdf">PDF</button>
+                    </div>`;
+                DOMElements.resultsArea.appendChild(exportDiv);
+                exportDiv.querySelector('#export-buttons').addEventListener('click', (e) => {
+                    if (e.target.dataset.format) handleExport(data, e.target.dataset.format);
+                });
+            }
+
+            // --- GESTIONNAIRES D'ÉVÉNEMENTS ---
+            function handleFileUpload(e) {
+                if (!e.target.files.length) return;
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!data['Browser History']) throw new Error('Format JSON invalide ou clé "Browser History" manquante.');
+
+                        const history = data['Browser History'].sort((a, b) => (b.time_usec || 0) - (a.time_usec || 0));
+                        const fileMeta = {
+                            name: file.name,
+                            size: `${(file.size / (1024 * 1024)).toFixed(2)} Mo`,
+                            format: file.name.split('.').pop() || 'json',
+                            totalEntries: history.length,
+                            startDate: history.length ? new Date(history[history.length - 1].time_usec / 1000).toLocaleDateString('fr-FR') : 'N/A',
+                            endDate: history.length ? new Date(history[0].time_usec / 1000).toLocaleDateString('fr-FR') : 'N/A'
+                        };
+
+                        sessionStorage.setItem('fullHistory', JSON.stringify(history));
+                        sessionStorage.setItem('fileMeta', JSON.stringify(fileMeta));
+                        state.allHistory = history;
+                        
+                        DOMElements.fileInput.value = '';
+                        showAnalysisSection();
+                        displayFileStats(fileMeta);
+                        render();
+                        showAlert(`Fichier "${file.name}" importé avec succès !`, 'success', 2000);
+                    } catch(err) {
+                        showAlert(`Erreur: Fichier invalide. ${err.message}`, 'error', 5000);
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            function handleControlsClick(e) {
+                const button = e.target.closest('button[data-view]');
+                if (button) {
+                    state.currentView = button.dataset.view;
+                    state.currentPage = 1;
+                    updateSortOptions();
+                    state.currentSort = DOMElements.sortSelect.value;
+                    render();
+                }
+            }
+            
+            const handleSortChange = (e) => { state.currentSort = e.target.value; state.currentPage = 1; render(); };
+            const handleSearch = () => { state.searchTerm = DOMElements.globalSearchBar.value; state.currentPage = 1; render(); };
+            const handlePaginationInputChange = (e) => { if (e.target.id === 'page-input') goToPage(e.target); };
+            const handlePaginationInputKeydown = (e) => { if (e.key === 'Enter' && e.target.id === 'page-input') { e.preventDefault(); goToPage(e.target); } };
+            const handlePaginationButtonClick = (e) => { if (e.target.tagName === 'BUTTON' && e.target.closest('#pagination')) { state.currentPage = parseInt(e.target.dataset.page); render(); } };
+            
+            function goToPage(input) {
+                let page = parseInt(input.value);
+                const totalPages = Math.ceil(processData().length / state.itemsPerPage) || 1;
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                state.currentPage = page;
+                render();
+            }
+
+            // --- FONCTIONS AUXILIAIRES ---
+            const groupDataBy = (data, key) => data.reduce((acc, item) => {
+                if (!item.url) return acc;
+                let value;
+                try {
+                    value = key === 'domain' ? new URL(item.url).hostname.replace(/^www\./, '') : item.url;
+                } catch { return acc; }
+                acc[value] = (acc[value] || 0) + 1;
+                return acc;
+            }, {});
+
+            const getSortFunction = (isGrouped) => (a, b) => {
+                switch (state.currentSort) {
+                    case 'name_asc': return (isGrouped ? a[0] : (a.title || '')).localeCompare(isGrouped ? b[0] : (b.title || ''));
+                    case 'name_desc': return (isGrouped ? b[0] : (b.title || '')).localeCompare(isGrouped ? a[0] : (a.title || ''));
+                    case 'count_asc': return isGrouped ? a[1] - b[1] : 0;
+                    case 'count_desc': return isGrouped ? b[1] - a[1] : 0;
+                    case 'url_asc': return (isGrouped ? a[0] : (a.url || '')).localeCompare(isGrouped ? b[0] : (b.url || ''));
+                    default: return isGrouped ? 0 : (b.time_usec || 0) - (a.time_usec || 0); // date_desc
+                }
+            };
+            
+            let debounceTimer;
+            const debounce = (func, delay) => (...args) => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => func.apply(this, args), delay);
+            };
+
+            // --- LOGIQUE D'EXPORTATION ---
+            function handleExport(data, format) {
+                if (!data || data.length === 0) {
+                    showAlert("Rien à exporter.", 'error');
+                    return;
+                }
+                const filename = `export-${state.currentView}-${new Date().toISOString().slice(0, 10)}.${format}`;
+                const isGrouped = Array.isArray(data[0]);
+                let dataToExport = [...data];
+                let content;
+
+                // Spécifique pour HTML et PDF: déduplication et tri par titre
+                if ((format === 'html' || format === 'pdf') && !isGrouped) {
+                    const uniqueEntries = new Map();
+                    data.forEach(item => {
+                        const key = `${item.title}|${item.url}`; // Clé unique
+                        if (!uniqueEntries.has(key)) {
+                            uniqueEntries.set(key, item);
+                        }
+                    });
+                    dataToExport = Array.from(uniqueEntries.values());
+                    // Tri par titre (A-Z)
+                    dataToExport.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+                }
+
+
+                switch (format) {
+                    case 'json':
+                        content = JSON.stringify(dataToExport, null, 2);
+                        break;
+                    case 'csv':
+                        const toCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
+                        const headers = isGrouped ? ['item', 'count'] : ['title', 'url', 'time_usec'];
+                        const rows = isGrouped ? dataToExport : dataToExport.map(item => [item.title, item.url, item.time_usec]);
+                        content = [headers.map(toCsv).join(','), ...rows.map(row => row.map(toCsv).join(','))].join('\n');
+                        break;
+                    case 'html':
+                        const bodyHtml = isGrouped 
+                            ? `<table><thead><tr><th>Item</th><th>Count</th></tr></thead><tbody>${dataToExport.map(row => `<tr><td><a href="${row[0]}" target="_blank" rel="noopener noreferrer">${row[0]}</a></td><td>${row[1]}</td></tr>`).join('')}</tbody></table>`
+                            : `<ul>${dataToExport.map(item => `<li><strong>${item.title || 'N/A'}</strong><br><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.url}</a></li>`).join('')}</ul>`;
+                        
+                        content = `<!DOCTYPE html><html lang="fr"><head><title>Export</title><meta charset="UTF-8"><style>body{font-family:sans-serif;margin:2rem;}table,th,td{border:1px solid #ccc;padding:5px;border-collapse:collapse;}ul{padding:0;}li{border-bottom:1px solid #eee;padding:.5rem 0;list-style:none;}</style></head><body><h1>Export - ${dataToExport.length} éléments</h1>${bodyHtml}<\/body><\/html>`;
+                        break;
+                    case 'pdf':
+                        exportToPdf(dataToExport, isGrouped); // Utilise les données traitées
+                        return; // La fonction PDF gère son propre téléchargement et alerte
+                    default: // txt
+                        content = dataToExport.map(item => isGrouped ? `${item[0]}: ${item[1]}` : item.url).join('\n');
+                }
+                
+                downloadFile(content, filename, 'text/plain;charset=utf-8;');
+                showAlert(`Fichier "${filename}" exporté avec succès.`, 'success');
+            }
+            
+            function exportToPdf(data, isGrouped) {
+                if (!window.jspdf) {
+                    showAlert("La bibliothèque PDF n'est pas chargée.", 'error');
+                    return;
+                }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const margin = 15;
+                const pageHeight = doc.internal.pageSize.height;
+                const wrapWidth = doc.internal.pageSize.width - (margin * 2);
+                let y = margin + 15;
+
+                const viewTitle = isGrouped ? state.currentView : "Liste triée par titre";
+                doc.setFontSize(18).text(`Export: ${viewTitle}`, margin, margin);
+                
+                data.forEach((item, index) => {
+                    const title = isGrouped ? '' : (item.title || 'N/A');
+                    const url = isGrouped ? item[0] : item.url;
+                    const count = isGrouped ? `: ${item[1].toLocaleString('fr-FR')}` : '';
+
+                    if (y > pageHeight - 30) {
+                        doc.addPage();
+                        y = margin;
+                    }
+                    
+                    if(title) {
+                        doc.setFontSize(11).setTextColor(0,0,0).setFont(undefined, 'bold');
+                        const titleLines = doc.splitTextToSize(title, wrapWidth);
+                        doc.text(titleLines, margin, y);
+                        y += (titleLines.length * 5);
+                    }
+
+                    doc.setFontSize(9).setTextColor(40, 57, 126).setFont(undefined, 'normal');
+                    const urlText = url + count;
+                    const urlLines = doc.splitTextToSize(urlText, wrapWidth);
+                    // Manuellement créer le lien pour éviter les problèmes de texte sur plusieurs lignes
+                    doc.textWithLink(urlLines[0], margin, y, { url: url });
+                    y += 5;
+                    if(urlLines.length > 1) {
+                         doc.text(urlLines.slice(1), margin, y);
+                         y += ((urlLines.length -1) * 5);
+                    }
+                    y += 8;
+                });
+                
+                const filename = `export-${state.currentView}-trié-${new Date().toISOString().slice(0, 10)}.pdf`;
+                doc.save(filename);
+                showAlert(`Fichier "${filename}" exporté avec succès.`, 'success');
+            }
+
+            function downloadFile(content, filename, contentType) {
+                const blob = new Blob([content], { type: contentType });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+            }
+
+            // --- Lancement de l'application ---
+            init();
+        });
+    </script>
+</body>
+</html>

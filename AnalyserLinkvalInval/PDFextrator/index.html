@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Analysez rapidement les liens PDF pour extraire tous les liens, visibles ou cachés. Téléchargez l'application et commencez à optimiser vos ressources dès maintenant.">
+    <title>Extracteurs de Liens PDF | La Boîte à Outils EXE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="./fav/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a12; --primary: #1a1a2e; --secondary: #16213e; --accent: #00ff88;
+            --text-main: #e0e0e0; --text-dim: #a0a0a0; --danger: #ff3860; --success: #3fb950;
+            --border: #2a2a3a; --glow: 0 0 15px rgba(0, 255, 136, 0.2);
+            --font-main: 'JetBrains Mono', monospace; --font-display: 'Share Tech Mono', monospace;
+            --nav-height: 70px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: var(--font-main); background-color: var(--bg-dark); color: var(--text-main); line-height: 1.7; padding-top: var(--nav-height); }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+        .main-navigation { position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height); background-color: rgba(10, 10, 18, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .nav-logo a { font-family: var(--font-display); font-size: 1.5rem; color: var(--accent); text-decoration: none; }
+        .main-nav ul { display: flex; gap: 2rem; list-style: none; }
+        .main-nav a { color: var(--text-dim); text-decoration: none; font-size: 1rem; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--accent); }
+
+        .site-header { padding: 6rem 0; text-align: center; }
+        .site-header h1 { font-family: var(--font-display); font-size: 3.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .site-header h1 .blink { animation: blink 1s infinite; }
+        .site-header .subtitle { font-size: 1.5rem; color: var(--text-main); margin-bottom: 2rem; }
+        .site-header p { font-size: 1.1rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 2.5rem; }
+        .btn { padding: 1rem 2rem; background: var(--accent); color: var(--bg-dark); border: none; border-radius: 4px; font-family: var(--font-main); font-weight: bold; font-size: 1.1rem; cursor: pointer; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; }
+        .btn:hover { background-color: #00cc6a; box-shadow: var(--glow); transform: translateY(-3px); }
+        .btn i { line-height: 1; } /* Fix icon alignment */
+        
+        .section { padding: 5rem 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .section:last-of-type { border-bottom: none; }
+        .section.visible { opacity: 1; transform: translateY(0); }
+        .section-title { font-family: var(--font-display); font-size: 2.5rem; text-align: center; margin-bottom: 3rem; color: var(--accent); }
+        .section-title::before { content: "// "; color: var(--text-dim); }
+        
+        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: stretch; }
+        .card { background: var(--primary); padding: 2rem; border-left: 3px solid var(--accent); border-radius: 4px; display: flex; flex-direction: column; }
+        .card h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; color: var(--accent); }
+        .card h3 i { color: var(--text-main); }
+        .card ul { list-style: none; padding-left: 1rem; flex-grow: 1; }
+        .card li { margin-bottom: 0.75rem; position: relative; }
+        .card li::before { content: '>'; color: var(--accent); position: absolute; left: -1rem; font-weight: bold; }
+
+        code { background-color: #2a2a3a; color: #ff3860; padding: 3px 6px; border-radius: 3px; font-family: inherit; }
+        
+        .info-box { background: var(--secondary); padding: 1.5rem; border-left: 3px solid var(--danger); border-radius: 4px; margin-top: 2rem; }
+
+        ol.step-by-step { list-style: none; counter-reset: step-counter; padding-left: 0; }
+        ol.step-by-step li { counter-increment: step-counter; margin-bottom: 1.5rem; position: relative; padding-left: 45px; }
+        ol.step-by-step li::before {
+            content: counter(step-counter);
+            position: absolute; left: 0; top: -3px;
+            width: 30px; height: 30px;
+            background: var(--accent); color: var(--bg-dark);
+            border-radius: 50%;
+            text-align: center; font-weight: bold; line-height: 30px; font-family: var(--font-display);
+        }
+
+        .super-footer { background-color: var(--bg-darker); padding: 4rem 0 2rem; border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-column h4 { font-family: var(--font-display); font-size: 1.5rem; color: var(--accent); margin-bottom: 1.5rem; }
+        .footer-column p, .footer-column a { color: var(--text-dim); text-decoration: none; transition: color 0.2s ease; }
+        .footer-column ul { list-style: none; } .footer-column li { margin-bottom: 0.75rem; }
+        .footer-column a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem; }
+        
+        @keyframes blink { 50% { opacity: 0; } }
+        @media (max-width: 768px) { .main-nav { display: none; } .grid-cards { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="main-navigation">
+        <div class="nav-container">
+            <!-- Remplacez 'index.html' par le lien vers la page principale de votre suite d'outils -->
+            <div class="nav-logo"><a href="index.html">La Boîte à Outils</a></div> 
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/RcloneTelechargeur/tuto/portail/index.html">Joker Tool's</a></li>
+                    <li><a href="/RcloneTelechargeur/index.html">Telechargeur_Rclone</a></li>
+                    <li><a href="#tools-overview">Les Outils</a></li>
+                    <li><a href="#how-to-use">Tutoriel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="site-header">
+        <div class="container">
+            <h1>Extracteurs de Liens PDF<span class="blink">_</span></h1>
+            <h2 class="subtitle">Extrayez chaque lien, visible ou caché, de n'importe quel PDF.</h2>
+            <p>Plus besoin de chercher manuellement les URLs dans vos documents. Ces outils scannent les PDF en profondeur pour récupérer tous les liens, même ceux intégrés dans du texte comme "cliquez ici".</p>
+            <!-- Le bouton doit pointer vers la page de téléchargement de votre suite complète -->
+            <a href="/RcloneTelechargeur/tuto/portail/tuneling.html" class="btn"><i class="fas fa-download"></i> Télécharger la Suite d'Outils</a>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="section" id="tools-overview">
+            <h2 class="section-title">Deux Outils, Un Objectif</h2>
+            <div class="grid-cards">
+                <div class="card">
+                    <h3><i class="fas fa-search"></i>Extracteur Simple</h3>
+                    <ul>
+                        <li>Une application <strong>exécutable (.exe)</strong> légère et rapide.</li>
+                        <li>Extrait uniquement les URLs brutes et visibles (ex: `http://exemple.com`).</li>
+                        <li>Génère un fichier <code>.txt</code> simple avec un lien par ligne.</li>
+                        <li>Parfait pour une récupération rapide et sans fioritures.</li>
+                        <li><strong>Dossier :</strong> <code>$simple/dist/</code></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-rocket"></i>Extracteur 'Bizarre' (Complet)</h3>
+                     <ul>
+                        <li>La version <strong>exécutable (.exe)</strong> la plus puissante.</li>
+                        <li>Extrait TOUS les liens, y compris ceux cachés dans le texte.</li>
+                        <li>Récupère aussi le texte sur lequel le lien est attaché.</li>
+                        <li>Génère un fichier <code>.txt</code> structuré pour une meilleure lisibilité.</li>
+                        <li><strong>Dossier :</strong> <code>$bizzare/dist/</code></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="how-to-use">
+            <h2 class="section-title">Comment Ça Marche ?</h2>
+            <p style="text-align:center; max-width: 700px; margin: 0 auto 3rem; color: var(--text-dim);">L'utilisation est incroyablement simple. Pas besoin d'installer Python ou des dépendances complexes. Suivez simplement ces étapes :</p>
+
+            <ol class="step-by-step">
+                <li>Après avoir téléchargé et décompressé le pack, naviguez vers le dossier : <code>MES APPLICATION EXE/les extrateurs de lien dans pdf/</code>.</li>
+                <li>Choisissez la version que vous souhaitez utiliser : <code>$simple</code> (pour les liens visibles) ou <code>$bizzare</code> (pour tous les liens).</li>
+                <li>Ouvrez le sous-dossier correspondant, puis entrez dans le dossier <code>dist</code>.</li>
+                <li><strong>Double-cliquez sur le fichier <code>.exe</code></strong> qui s'y trouve.</li>
+                <li>Une fenêtre de terminal s'ouvrira, vous demandant de glisser-déposer votre fichier PDF. Suivez simplement les instructions à l'écran !</li>
+            </ol>
+
+            <div class="info-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> Note importante</h4>
+                <p>Comme ces exécutables ont été créés à partir de scripts, votre système d'exploitation ou antivirus pourrait afficher un avertissement de sécurité. C'est une fausse alerte normale. Les outils sont sûrs.</p>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="super-footer">
+        <div class="container footer-bottom">
+            <p>© 2025 - La Boîte à Outils EXE. Un projet de Joker.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            if (sections.length > 0) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            // observer.unobserve(entry.target); // Optional: Stop observing after first animation
+                        }
+                    });
+                }, { threshold: 0.1 });
+                sections.forEach(section => { observer.observe(section); });
+            }
+        });
+    </script>
+</body>
+</html>

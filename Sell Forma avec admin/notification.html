@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormationPro - Mes Notifications</title>
+    
+    <!-- Google Fonts: Inter (police pro) & Fira Code (police hacker) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">FormationPro</a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="notification.html" class="active"><i class="fas fa-bell"></i> Notifications <span id="notif-count" class="notif-count" style="display: none;">0</span></a></li>
+                <li><a href="formationbuy.html"><i class="fas fa-graduation-cap"></i> Mes Formations</a></li>
+                <li>
+                    <a href="panier.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i> Panier
+                        <span id="cart-item-count" class="cart-count">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header-user-info">
+             <div class="user-id-container">
+                <span id="user-id-display"></span>
+                <button id="copy-user-id-btn" title="Copier mon ID client"><i class="fas fa-copy"></i></button>
+            </div>
+            <button id="theme-switcher" class="theme-switcher" title="Changer de thème">
+                <i class="fas fa-adjust"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="notifications-header">
+            <h1>Mes Notifications</h1>
+            <button id="delete-all-btn" class="btn btn-danger" style="display: none;">Tout supprimer</button>
+        </div>
+        
+        <ul id="notification-list" class="notification-list">
+            <!-- Les notifications seront injectées ici par JavaScript -->
+        </ul>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Aide & Support</h3>
+                <a href="tutoriel.html">Tutoriel d'utilisation</a>
+                <a href="https://wa.me/2250595762779" target="_blank">Service Client (WhatsApp)</a>
+            </div>
+            <div class="footer-column">
+                <h3>Parrainage</h3>
+                <p>Invitez des amis et gagnez des bonus !</p>
+                <div class="referral-container">
+                    <input type="text" id="referral-link-input" readonly>
+                    <button id="copy-referral-link-btn" class="btn btn-primary">Copier</button>
+                </div>
+                 <a href="parrainage.html">Voir mes gains</a>
+            </div>
+            <div class="footer-column">
+                <h3>Mes Données</h3>
+                <button id="export-btn" class="btn btn-secondary">Exporter mes données</button>
+                <label for="import-file" class="btn btn-secondary">Importer mes données</label>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 FormationPro. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <a href="#" id="scroll-to-top" class="scroll-to-top"><i class="fas fa-arrow-up"></i></a>
+    <div id="alert-container"></div>
+
+    <script src="js/helpers.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- SCRIPT AMÉLIORÉ POUR LA PAGE NOTIFICATIONS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const listContainer = document.getElementById('notification-list');
+            const deleteAllBtn = document.getElementById('delete-all-btn');
+            const userId = getOrGenerateUserId();
+
+            function getNotifications() {
+                const allNotifications = JSON.parse(localStorage.getItem('userNotifications')) || {};
+                return allNotifications[userId] || [];
+            }
+
+            function saveNotifications(notifications) {
+                let allNotifications = JSON.parse(localStorage.getItem('userNotifications')) || {};
+                allNotifications[userId] = notifications;
+                localStorage.setItem('userNotifications', JSON.stringify(allNotifications));
+            }
+
+            function renderNotifications() {
+                const userNotifications = getNotifications();
+                
+                if (userNotifications.length === 0) {
+                    listContainer.innerHTML = `<div class="no-notifications-message"><h3>C'est calme ici...</h3><p>Vos notifications importantes apparaîtront sur cette page.</p></div>`;
+                    deleteAllBtn.style.display = 'none';
+                    return;
+                }
+
+                deleteAllBtn.style.display = 'inline-block';
+                listContainer.innerHTML = ''; 
+                userNotifications.forEach(notif => {
+                    const date = new Date(notif.date).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' });
+                    const iconClass = { success: 'fa-check-circle', danger: 'fa-times-circle', info: 'fa-info-circle' }[notif.type] || 'fa-bell';
+                    
+                    const notifHTML = `
+                        <li class="notification-item ${notif.type} ${notif.read ? '' : 'unread'}" data-id="${notif.id}">
+                            <div class="notification-icon"><i class="fas ${iconClass}"></i></div>
+                            <div class="notification-content">
+                                <p>${notif.message}</p>
+                                <div class="notification-date">${date}</div>
+                            </div>
+                            <!-- Bouton de suppression individuelle -->
+                            <button class="notification-delete-btn" data-action="delete" title="Supprimer cette notification">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </li>
+                    `;
+                    listContainer.insertAdjacentHTML('beforeend', notifHTML);
+                });
+            }
+
+            function markAllAsRead() {
+                let userNotifications = getNotifications();
+                userNotifications.forEach(notif => notif.read = true);
+                saveNotifications(userNotifications);
+                updateNotificationBadge(); 
+            }
+
+            // GESTION DES CLICS (Suppression individuelle ou globale)
+            document.body.addEventListener('click', async (e) => {
+                const deleteAllButton = e.target.closest('#delete-all-btn');
+                const deleteIndividualButton = e.target.closest('.notification-delete-btn');
+
+                if (deleteAllButton) {
+                    const confirmed = await showConfirmation(
+                        'Tout supprimer ?', 
+                        'Voulez-vous vraiment supprimer TOUTES vos notifications ? Cette action est irréversible.',
+                        { confirmText: 'Oui, tout supprimer', confirmClass: 'btn-danger' }
+                    );
+                    if (confirmed) {
+                        saveNotifications([]);
+                        renderNotifications();
+                        showAlert('Toutes les notifications ont été supprimées.', 'info');
+                    }
+                }
+
+                if (deleteIndividualButton) {
+                    const notifItem = deleteIndividualButton.closest('.notification-item');
+                    const notifId = notifItem.dataset.id;
+                    
+                    // Animation de suppression
+                    notifItem.style.transition = 'opacity 0.3s, transform 0.3s';
+                    notifItem.style.opacity = '0';
+                    notifItem.style.transform = 'translateX(50px)';
+                    
+                    setTimeout(() => {
+                        let userNotifications = getNotifications();
+                        const updatedNotifications = userNotifications.filter(n => n.id !== notifId);
+                        saveNotifications(updatedNotifications);
+                        renderNotifications(); // Redessine la liste sans l'élément
+                        showAlert('Notification supprimée.', 'success');
+                    }, 300);
+                }
+            });
+
+            // Rendu initial et marquage des notifications comme lues
+            renderNotifications();
+            markAllAsRead();
+        });
+    </script>
+</body>
+</html>

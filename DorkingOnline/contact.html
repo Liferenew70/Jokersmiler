@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | DorkMaster Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="fav/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --bg-dark: #0a0a12;
+            --bg-darker: #050508;
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #00ff88;
+            --accent-dark: #00cc6a;
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --danger: #ff3860;
+            --border: #2a2a3a;
+            --glow: 0 0 15px rgba(0, 255, 136, 0.3);
+            --font-main: 'JetBrains Mono', monospace;
+            --font-display: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.04) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 136, 0.04) 0%, transparent 25%);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        /* Contact Form Container */
+        .contact-container {
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--glow);
+            overflow: hidden;
+        }
+
+        /* Header Style */
+        .contact-header {
+            background-color: var(--secondary);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .contact-header h1 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .contact-header h1 .blink {
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .contact-header p {
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Form Styling */
+        .contact-form {
+            padding: 2.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--accent-dark);
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer/Disclaimer */
+        .disclaimer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        
+        .disclaimer i {
+            color: var(--warning);
+        }
+        
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            .contact-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="contact-container">
+            <header class="contact-header">
+                <h1>
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Contact_Channel</span>
+                    <span class="blink">_</span>
+                </h1>
+                <p>Secure Transmission Line</p>
+            </header>
+
+            <main>
+                <form id="contactForm" class="contact-form" autocomplete="off">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">> Prénom</label>
+                            <input type="text" id="firstName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">> Nom</label>
+                            <input type="text" id="lastName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label for="profession" class="form-label">> Profession</label>
+                        <input type="text" id="profession" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">> Message_</label>
+                        <textarea id="message" class="form-control" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn" style="margin-top: 2.5rem;">
+                        <i class="fas fa-lock"></i>
+                        ENVOYER LE MESSAGE
+                    </button>
+                </form>
+            </main>
+        </div>
+        
+        <footer class="disclaimer">
+            <p><i class="fas fa-info-circle"></i> En cliquant sur envoyer, vous serez redirigé vers WhatsApp pour transmettre le message.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            // Empêche le rechargement de la page
+            event.preventDefault();
+
+            // --- Récupération des données du formulaire ---
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const profession = document.getElementById('profession').value;
+            const message = document.getElementById('message').value;
+
+            // --- Numéro de téléphone cible ---
+            const whatsAppNumber = '+2250595762779';
+
+            // --- Formatage du message ---
+            // On utilise des séparateurs clairs pour une bonne lisibilité sur WhatsApp
+            const formattedMessage = `
+*-- NOUVEAU MESSAGE DE CONTACT --*
+
+*Prénom :* ${firstName}
+*Nom :* ${lastName}
+*Profession :* ${profession}
+
+*Message :*
+${message}
+            `;
+
+            // --- Création de l'URL WhatsApp ---
+            // encodeURIComponent s'assure que les caractères spéciaux (espaces, sauts de ligne) sont correctement formatés pour l'URL
+            const whatsappUrl = `https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(formattedMessage)}`;
+
+            // --- Redirection de l'utilisateur ---
+            // Ouvre le lien dans un nouvel onglet
+            window.open(whatsappUrl, '_blank');
+        });
+    </script>
+</body>
+</html>

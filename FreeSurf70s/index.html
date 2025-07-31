@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr" class="theme-light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Le guide ultime pour comprendre et maîtriser le Free Surf, avec des techniques de contournement sur les réseaux mobiles.">
+    <title>70s - Le Guide Ultime du Free Surf</title>
+    <link rel="shortcut icon" href="FAVICON/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... [Tout le CSS reste identique, il n'est pas affiché ici pour la lisibilité] ... */
+         :root {
+            --font-main: 'Poppins', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+        html.theme-light {
+            --bg-color: #F0F2F5; --surface-color: #FFFFFF; --text-color: #1c1e21;
+            --text-muted: #65676B; --primary-color: #0056b3; --secondary-color: #007bff;
+            --accent-color: #d99a00; --border-color: #e4e6eb; --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        html.theme-dark {
+            --bg-color: #121212; --surface-color: #1e1e1e; --text-color: #E4E6EB;
+            --text-muted: #B0B3B8; --primary-color: #4dabf7; --secondary-color: #3b82f6;
+            --accent-color: #f59e0b; --border-color: #3A3B3C; --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+        html.theme-hacker {
+            --bg-color: #000000; --surface-color: #0d0d0d; --text-color: #00ff00;
+            --text-muted: #00c200; --primary-color: #39ff14; --secondary-color: #00ff00;
+            --accent-color: #ff00ff; --border-color: #00ff00; --shadow-color: rgba(0, 255, 0, 0.2);
+            font-family: var(--font-code);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main); background-color: var(--bg-color);
+            color: var(--text-color); transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 1rem 2rem; }
+        .site-header {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .logo span { color: var(--text-muted); }
+        .navigation { display: flex; align-items: center; gap: 1rem; }
+        .navigation a { text-decoration: none; color: var(--text-muted); font-weight: 600; transition: color 0.2s; padding: 0.5rem; font-size: 0.95rem;}
+        .navigation a:hover { color: var(--primary-color); }
+        .theme-switcher { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 20px; }
+        .hero { text-align: center; padding: 5rem 1rem; background: var(--surface-color); }
+        .hero h1 { font-size: 3rem; color: var(--primary-color); font-weight: 700; margin-bottom: 1rem; }
+        .hero h1 span { color: var(--text-color); }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 2rem; }
+        .btn { background-color: var(--primary-color); color: white !important; padding: 1rem 2rem; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s, transform 0.2s; display: inline-block; }
+        .btn:hover { background-color: var(--secondary-color); transform: translateY(-3px); }
+        .section { padding: 4rem 0; border-top: 1px solid var(--border-color); }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 700; }
+        .section-title span { color: var(--primary-color); }
+        .warning-card { background-color: var(--surface-color); border-left: 5px solid var(--accent-color); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; box-shadow: 0 4px 15px var(--shadow-color); }
+        
+        details {
+            background-color: var(--surface-color); border-radius: 10px;
+            border: 1px solid var(--border-color); box-shadow: 0 2px 8px var(--shadow-color);
+            margin-bottom: 1.5rem; transition: all 0.3s ease;
+        }
+        details[open] { box-shadow: 0 6px 20px var(--shadow-color); border-left: 4px solid var(--primary-color); }
+        summary {
+            padding: 1.5rem; font-size: 1.3rem; font-weight: 600;
+            cursor: pointer; list-style: none;
+            position: relative; color: var(--text-color);
+        }
+        summary i {
+            color: var(--primary-color);
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        summary::after {
+            content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; right: 1.5rem; top: 50%;
+            transform: translateY(-50%) rotate(0deg); transition: transform 0.3s ease, color 0.3s ease;
+            color: var(--text-muted);
+        }
+        details[open] summary::after { transform: translateY(-50%) rotate(-180deg); color: var(--primary-color); }
+        .details-content { padding: 0 1.5rem 1.5rem; }
+        .details-content h4 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 1rem; color: var(--primary-color); font-weight: 700; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        .details-content p, .details-content ul, .details-content ol { color: var(--text-muted); padding-left: 1rem; margin-bottom: 1rem; }
+        .details-content li { margin-bottom: 0.75rem; }
+        
+        code {
+            background-color: var(--bg-color); color: var(--accent-color);
+            padding: 1rem; border-radius: 8px; font-family: var(--font-code);
+            border: 1px solid var(--border-color); white-space: pre-wrap;
+            word-break: break-all; display: block; margin-top: 1rem; font-size: 0.9rem;
+        }
+        .cta-card {
+            background: var(--surface-color); text-align: center;
+            padding: 3rem 2rem; border-radius: 12px;
+            margin: 2rem 0; border-top: 5px solid var(--primary-color);
+            box-shadow: 0 8px 30px var(--shadow-color);
+        }
+        .cta-card .card-icon { font-size: 3.5rem; color: var(--primary-color); margin-bottom: 1.5rem; }
+
+        .site-footer { background-color: var(--surface-color); color: var(--text-muted); padding: 3rem 1rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto 2rem; }
+        .footer-column h4 { color: var(--text-color); font-size: 1.2rem; margin-bottom: 1rem; }
+        .footer-column ul { list-style: none; } .footer-column li { margin-bottom: 0.5rem; }
+        .footer-column a { text-decoration: none; color: var(--text-muted); transition: color 0.2s; }
+        .footer-column a:hover { color: var(--primary-color); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+
+        #scrollToTopBtn {
+            display: none; position: fixed; bottom: 30px; right: 30px;
+            z-index: 1001; border: none; outline: none; background-color: var(--primary-color);
+            color: white; cursor: pointer; padding: 15px; border-radius: 50%;
+            font-size: 18px; line-height: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s; opacity: 0;
+        }
+        #scrollToTopBtn:hover { background-color: var(--secondary-color); transform: scale(1.1); }
+    </style>
+</head>
+<body id="page-top">
+
+    <header class="site-header">
+        <div class="logo">70<span>s</span></div>
+        <nav class="navigation">
+            <a href="#intro">Introduction</a>
+            <a href="#concepts">Les Bases</a>
+            <a href="#tutos">Tutoriels</a>
+            <a href="#ressources">Ressources</a>
+            <div id="theme-toggle" class="theme-switcher"><i class="fas fa-palette"></i> <span id="theme-name">Clair</span></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Le Guide Ultime du <span>Free Surf</span></h1>
+                <p>Un cours complet, inspiré par la communauté <strong>70 solutions (70s)</strong>, pour comprendre et maîtriser les techniques de contournement sur les réseaux mobiles. Devenez autonome grâce à la connaissance.</p>
+                <a href="#intro" class="btn"><i class="fas fa-satellite-dish"></i> Explorer le Guide</a>
+            </div>
+        </section>
+
+        <div class="container">
+            <section id="intro" style="border-top: none; padding-top:0;">
+                <h2 class="section-title"><span>Introduction</span> au Free Surf</h2>
+                <div class="warning-card">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Avertissement et Éthique :</strong> Le but de ce guide est <strong>strictement éducatif</strong>. Les informations et techniques partagées visent à démystifier le fonctionnement des réseaux et à illustrer des concepts de sécurité informatique. Leur mise en pratique peut enfreindre les CGU de votre FAI. Agissez en apprenant responsable.
+                </div>
+                <div class="warning-card" style="border-left-color: #007bff;">
+                     Le "Free Surf" consiste à utiliser des techniques spécifiques pour accéder à Internet via un réseau mobile sans consommer son forfait de données principal. Cela repose sur l'exploitation de "failles" ou de "portes dérobées" laissées ouvertes par les opérateurs, souvent des adresses (Hosts) ou des services qu'ils autorisent gratuitement (comme l'accès à WhatsApp, Facebook, etc.). En masquant le trafic internet classique pour le faire passer par ces adresses autorisées, les applications VPN de tunneling peuvent contourner les compteurs de données.
+                </div>
+                
+            </section>
+
+            <section id="concepts" class="section">
+                <h2 class="section-title">Les <span>Bases</span> Indispensables</h2>
+                 <details>
+                    <summary><i class="fas fa-network-wired"></i>Qu'est-ce qu'un réseau ?</summary>
+                    <div class="details-content">
+                        <p>Imaginez un groupe de personnes qui décident de connecter leurs ordinateurs pour partager des informations. Le résultat est un réseau. Internet est simplement un gigantesque réseau de réseaux, interconnectés par des Fournisseurs d'Accès à Internet (FAI) comme MTN, Orange, etc. Chaque FAI gère son propre trafic et peut décider de filtrer, bloquer ou autoriser certaines connexions, ce qui est à la base même du Free Surf.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary><i class="fas fa-project-diagram"></i>Protocoles et Ports</summary>
+                    <div class="details-content">
+                        <p>Les protocoles sont les "langues" qu'utilisent les ordinateurs pour communiquer (ex: HTTP, TCP). Les <strong>Ports</strong> sont les "portes" numérotées par lesquelles ces conversations transitent. Chaque service a son port. Dans le contexte du Free Surf, certains ports sont moins surveillés que d'autres.</p>
+                         <h4>Ports Clés et Protocoles courants :</h4>
+                        <ul>
+                            <li><code>21/20</code>: <strong>FTP</strong> (File Transfer Protocol). Utilisé pour le transfert de fichiers.</li>
+                            <li><code>22</code>: <strong>SSH</strong> (Secure Shell). Essentiel pour les accès à distance sécurisés et le tunneling.</li>
+                            <li><code>25</code>: <strong>SMTP</strong> (Simple Mail Transfer Protocol). Le protocole standard pour l'envoi d'e-mails.</li>
+                            <li><code>53</code>: <strong>DNS</strong> (Domain Name System). Traduit les noms de domaine en adresses IP. Le "DNS Tunneling" est une technique clé.</li>
+                            <li><code>80</code>: <strong>HTTP</strong> (HyperText Transfer Protocol). Le protocole du web non-sécurisé, fondamental.</li>
+                            <li><code>110</code>: <strong>POP3</strong> (Post Office Protocol v3). Un protocole utilisé pour récupérer les e-mails.</li>
+                            <li><code>143</code>: <strong>IMAP</strong> (Internet Message Access Protocol). Un autre protocole pour la réception d'e-mails, plus moderne que POP3.</li>
+                            <li><code>443</code>: <strong>HTTPS</strong> (HTTP Secure). Le port le plus important pour le tunneling via SSL/TLS, car le trafic est chiffré.</li>
+                            <li><code>993</code>: <strong>IMAPS</strong> (IMAP Secure). La version sécurisée d'IMAP.</li>
+                            <li><code>995</code>: <strong>POP3S</strong> (POP3 Secure). La version sécurisée de POP3.</li>
+                            <li><code>1194</code>: <strong>OpenVPN</strong>. Le port par défaut pour ce protocole VPN très populaire.</li>
+                            <li><code>8080</code>: <strong>Proxy HTTP</strong>. Un port alternatif très courant pour les serveurs proxy et le trafic web.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><i class="fas fa-key"></i>VPN, Host, SNI & Payload</summary>
+                    <div class="details-content">
+                        <h4>Le Host (ou Hôte) : La porte d'entrée</h4>
+                        <p>Un **Host** est simplement une adresse web (ex: `youtube.com`). Dans le Free Surf, un "bon host" est une adresse que l'opérateur laisse accessible même sans forfait data (souvent lié à un service comme WhatsApp, Facebook, ou des services internes à l'opérateur). C'est la faille que nous exploitons.</p>
+                        
+                        <h4>SNI (Server Name Indication) : Le cas particulier du HTTPS</h4>
+                        <p>Le SNI est une extension du protocole HTTPS. Quand vous vous connectez à `https://exemple.com`, votre appareil envoie le nom `exemple.com` **en clair** au début de la connexion, *avant* que le reste du trafic ne soit chiffré. L'opérateur peut lire ce nom. Si le SNI (`exemple.com`) correspond à un service autorisé, il laisse passer la connexion. La technique du **Spoof SNI** consiste donc à mettre un host autorisé dans ce champ SNI pour tromper l'opérateur.</p>
+                        
+                        <h4>Host vs. SNI : La différence clé</h4>
+                        <p>Bien que liés, ils sont utilisés dans des contextes différents. On parle de "Host" dans une requête **HTTP** (port 80), et de "SNI" pour le nom de domaine envoyé dans une requête **HTTPS** (port 443). La plupart des applications de tunneling modernes utilisent le SNI car le trafic HTTPS est la norme.</p>
+
+                        <h4>Le Payload : La Clé qui ouvre la porte</h4>
+                        <p>Le <strong>Payload</strong> est une requête (généralement HTTP) fabriquée à la main. On y insère le Host autorisé pour faire croire au serveur de l'opérateur qu'on accède à un service gratuit. Une fois la connexion acceptée grâce à ce "mensonge", le VPN crée un tunnel pour y faire passer tout notre trafic (vidéos, téléchargements, etc.).</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><i class="fas fa-exchange-alt"></i>TCP vs UDP : Quelle différence ?</summary>
+                    <div class="details-content">
+                        <p>Ce sont deux protocoles de transport majeurs, mais avec des philosophies opposées.</p>
+                         <h4>TCP (Transmission Control Protocol)</h4>
+                         <p>Imaginez un appel téléphonique : on établit une connexion, on s'assure que l'autre personne a bien reçu chaque phrase (accusé de réception), et on termine l'appel. C'est ce que fait TCP.</p>
+                        <ul>
+                            <li><strong>Fiable :</strong> Garantit que toutes les données arrivent dans le bon ordre.</li>
+                            <li><strong>Orienté connexion :</strong> Établit une session stable avant l'envoi de données.</li>
+                            <li><strong>Plus lent :</strong> Les vérifications constantes ajoutent un temps de latence.</li>
+                        </ul>
+                         <h4>UDP (User Datagram Protocol)</h4>
+                         <p>Imaginez envoyer une carte postale : vous l'envoyez sans savoir si elle arrivera, ni quand. C'est le principe d'UDP.</p>
+                         <ul>
+                             <li><strong>Rapide :</strong> Pas de vérification, on envoie les paquets le plus vite possible.</li>
+                             <li><strong>Sans connexion :</strong> Pas de session pré-établie.</li>
+                             <li><strong>Non fiable :</strong> Des paquets peuvent se perdre ou arriver dans le désordre. Idéal pour le streaming ou les jeux en ligne où la vitesse prime sur la perfection des données.</li>
+                             <li><strong>Pertinent pour le Free Surf :</strong> La technique de DroidVPN repose sur l'exploitation de ports UDP ouverts chez certains opérateurs.</li>
+                         </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><i class="fas fa-terminal"></i>Tunneling SSH & WebSocket</summary>
+                    <div class="details-content">
+                        <h4>Le Tunneling SSH (Secure Shell)</h4>
+                        <p>SSH est un protocole ultra-sécurisé utilisé à l'origine pour administrer des serveurs à distance. Il crée un canal de communication entièrement chiffré. En Free Surf, certaines applications VPN (comme HTTP Injector) encapsulent le trafic dans une connexion SSH. L'avantage est une sécurité et une stabilité souvent accrues, rendant le trafic plus difficile à inspecter par l'opérateur.</p>
+                        <h4>Les WebSockets</h4>
+                        <p>C'est une technologie qui permet une communication bi-directionnelle et en temps réel entre un navigateur et un serveur, sur la même connexion TCP (souvent utilisée pour les chats en direct, les jeux, etc.). Certains Payloads modernes utilisent le protocole WebSocket (`wss://`) car il ressemble à du trafic web normal et peut plus facilement passer à travers les pare-feu des opérateurs.</p>
+                    </div>
+                </details>
+            </section>
+
+            <section id="tutos" class="section">
+                <h2 class="section-title"><span>Tutoriels Détaillés</span> par Application</h2>
+
+                <details>
+                    <summary><i class="fas fa-tools"></i><strong>SocksIP / HA Tunnel Plus</strong> (Payload HTTP)</summary>
+                    <div class="details-content">
+                        <h4>Configuration :</h4>
+                        <ol>
+                            <li><strong>Prérequis :</strong> Activer un micro-forfait (ex: MTN WhatsApp 25F) peut être nécessaire pour l'amorçage.</li>
+                            <li>Dans l'app (section "Payload Generator"), entrez un <strong>Host fonctionnel</strong> de notre section <a href="#ressources">Ressources</a>.</li>
+                            <li>Choisissez la méthode <strong>HTTP-BUG</strong> ou similaire et cochez les options utiles (<code>Keep-Alive</code>, <code>Online Host</code>, etc).</li>
+                            <li>Cliquez sur <strong>"GENERATE"</strong>.</li>
+                            <li><strong>L'étape la plus importante :</strong> modifiez le texte généré pour qu'il commence par <code>HTTP/1.1 200 OK[crlf]</code>. Il faut souvent ajouter le <code>200 OK</code> manuellement et nettoyer la fin du texte pour qu'il n'y ait pas de code inutile après la requête.</li>
+                            <li><strong>"SAVE"</strong> ou <strong>"APPLY"</strong>, choisissez un serveur, puis <strong>"START"</strong>.</li>
+                        </ol>
+                    </div>
+                </details>
+                
+                 <details>
+                    <summary><i class="fas fa-user-secret"></i><strong>AnonyTun / TLS Tunnel</strong> (SSL & SNI)</summary>
+                    <div class="details-content">
+                         <h4>Méthode SNI (la plus simple et efficace)</h4>
+                        <ol>
+                           <li>Dans les paramètres, activez <strong>"Stealth Tunnel"</strong> ou "Méthode personnalisée".</li>
+                           <li>Protocole de connexion : <strong>SSL</strong> ou <strong>TLS</strong>. Port de connexion : <strong>443</strong>.</li>
+                           <li>Activez les paramètres SSL avancés (<strong>"Advanced SSL Settings"</strong> ou "Utiliser l'hôte SNI").</li>
+                           <li>Cochez <strong>"Spoof SNI Host"</strong>. Dans le champ "Spoof Host", mettez un Host/SNI valide (ex: <code>v.whatsapp.com</code>).</li>
+                           <li>Sauvegardez, revenez à l'accueil, et cliquez sur <strong>"CONNECT"</strong>.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                 <details>
+                    <summary><i class="fas fa-user-shield"></i><strong>DroidVPN</strong> (Méthode UDP)</summary>
+                     <div class="details-content">
+                         <p>Cette application nécessite un compte gratuit à créer sur le site DroidVPN. Elle est puissante pour exploiter les ports UDP ouverts.</p>
+                         <ol>
+                             <li>Créez un compte et entrez vos identifiants dans l'application.</li>
+                             <li>Allez dans <strong>Settings → UDP Settings</strong>.</li>
+                             <li>Configurez les ports selon les failles connues de votre opérateur :
+                                 <ul>
+                                    <li><strong>Pour Orange (CM):</strong> Remote UDP Port: <code>3128</code>, Local UDP Port: <code>443</code>.</li>
+                                    <li><strong>Pour MTN (CM):</strong> Remote UDP Port: <code>3128</code>, Local UDP Port: <code>80</code>.</li>
+                                 </ul>
+                             </li>
+                              <li>Allez dans <strong>UDP Connection Mode</strong> et choisissez <strong>Mode 1</strong>.</li>
+                             <li>Configurez les "counts" (TCount / RCount) si nécessaire :
+                                  <ul>
+                                    <li><strong>Pour Orange (CM):</strong> TCount : <code>2</code>, RCount : <code>3</code>.</li>
+                                    <li><strong>Pour MTN (CM):</strong> TCount : <code>0</code>, RCount : <code>0</code>.</li>
+                                 </ul>
+                             </li>
+                             <li>Revenez à l'accueil, choisissez un serveur gratuit ("Free Server") et connectez-vous.</li>
+                         </ol>
+                    </div>
+                </details>
+                
+                <details>
+                     <summary><i class="fas fa-syringe"></i><strong>HTTP Injector</strong> (SSH / SSL)</summary>
+                     <div class="details-content">
+                        <p>Très populaire pour Nexttel/Camtel, il utilise une connexion SSH sécurisée tunnelée via un SNI.</p>
+                        <ol>
+                            <li>Dans le menu principal, choisissez "SSL/TLS -> SSH" comme type de tunnel.</li>
+                            <li>Dans le champ <strong>Server Name Indication (SNI)</strong>, entrez un Host/SNI fonctionnel (ex: <code>m.facebook.com</code>).</li>
+                            <li>Cliquez sur START. L'application vous demandera de choisir un serveur SSH.</li>
+                            <li>Sélectionnez un pays dans la liste, puis un serveur marqué comme supportant <strong>"SSH"</strong>.</li>
+                            <li>Cliquez une seconde fois sur <strong>START</strong> pour lancer la connexion.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                 <details>
+                     <summary><i class="fas fa-rocket"></i><strong>Stark VPN Reloaded</strong> (Payloads TCP/HTTP)</summary>
+                     <div class="details-content">
+                        <p>Une application versatile qui permet une configuration facile via des payloads personnalisés.</p>
+                        <ol>
+                           <li>Ouvrez le menu et allez dans <strong>"Custom Settings"</strong>.</li>
+                           <li>Sélectionnez l'onglet correspondant à votre méthode (TCP, HTTP ou SSL).</li>
+                           <li>Pour MTN, choisissez TCP et entrez un port comme <code>3128</code>, puis dans <strong>CUSTOM PAYLOAD</strong>, entrez un payload simple comme : <br><code>HTTP/1.1 200 ok[crlf]Host:google.com[crlf]</code></li>
+                           <li>Pour Nexttel, choisissez HTTP (port 8080) et un payload avec un User-Agent comme celui dans notre <a href="#ressources">banque de payloads</a>.</li>
+                           <li>Sauvegardez, retournez à l'accueil et appuyez sur le bouton de connexion.</li>
+                        </ol>
+                     </div>
+                 </details>
+
+            </section>
+
+            <section id="ressources" class="section">
+                <h2 class="section-title"><span>Arsenal Complet</span> & Ressources</h2>
+
+                <details>
+                    <summary><i class="fas fa-stream"></i>L'Arsenal des Applications VPN</summary>
+                     <div class="details-content">
+                       <p>Chaque application a ses forces. Votre arsenal devrait en contenir plusieurs :</p>
+                       <ul>
+                           <li><strong>SocksIP / HA Tunnel Plus:</strong> Les classiques du Payload HTTP. Simples et efficaces.</li>
+                           <li><strong>AnonyTun / TLS Tunnel:</strong> Experts des tunnels SSL/SNI. Idéal pour Nexttel et Camtel.</li>
+                           <li><strong>DroidVPN:</strong> Spécialiste unique du protocole UDP, souvent la clé pour Orange.</li>
+                           <li><strong>HTTP Injector:</strong> Robuste et sécurisé grâce à son tunnel SSH.</li>
+                           <li><strong>Stark VPN Reloaded:</strong> Permet d'exporter des configurations protégées.</li>
+                           <li><strong>Your-Freedom:</strong> Le maître incontesté du Tunnel DNS, discret mais souvent plus lent en version gratuite.</li>
+                           <li><strong>Wire Tun / Hero DNSTT:</strong> Des VPN "sans config" basés sur le DNS, parfaits pour tester rapidement une connexion.</li>
+                           <li><strong>Techoragon VPN / HKH VPN:</strong> Alternatives puissantes offrant des options de configuration avancées.</li>
+                       </ul>
+                    </div>
+                </details>
+                
+                <details open>
+                    <summary><i class="fas fa-server"></i>Immense Liste de Hosts & SNI</summary>
+                     <div class="details-content">
+                        <p>Testez ces adresses dans le champ Host ou SNI de vos applications. Ce qui fonctionne un jour peut être bloqué le lendemain. La clé est l'expérimentation !</p>
+                        <h4>Hosts pour MTN & Orange (CM)</h4>
+                        <p>Ces hosts fonctionnent souvent avec un payload HTTP ou en mode TCP.</p>
+                        <code>youtube.com
+google.com
+tiktok.com
+vimeo.com
+Dailymotion.com
+soundcloud.com
+Wikipedia.org
+Twitch.tv
+skyrock.com
+weixin.qq.com
+cdn.whatsapp.net/f
+mms.com/
+video.google.com/
+dns.google.com/
+gprs.google.com/
+wap.google.com/
+cloud.google.com
+suggestqueries-clients6.youtube.com
+dev.tiktok.com
+ns0.wikimedia.org.
+.cloudflare.com</code>
+                        <h4>Hosts / SNI pour Nexttel, Camtel & Yoomee (CM)</h4>
+                        <p>Ces adresses sont particulièrement efficaces en mode SSL/SNI sur le port 443.</p>
+                        <code>lerequest.whatsapp.com
+0.whatsapp.com
+media.whatsapp.com
+nokia.whatsapp.com
+alpha.whatsapp.com
+c.whatsapp.com
+music.whatsapp.com
+v.whatsapp.com
+autodiscover.whatsapp.com
+business.whatsapp.com
+chat.whatsapp.com
+account.whatsapp.com
+web.whatsapp.com
+time1.facebook.com
+download.0.facebook.com
+id.0.facebook.com
+m.facebook.com
+ton.twitter.com
+upload.twitter.com
+cdn.syndication.twitter.com
+m.axisworld.co.id.0.facebook.com
+</code>
+                    </div>
+                </details>
+                 
+                 <details>
+                    <summary><i class="fas fa-network-wired"></i>Serveurs DNS par Opérateur (Cameroun)</summary>
+                    <div class="details-content">
+                       <p>Indispensable pour les techniques de Tunnel DNS (Your-Freedom, HA Tunnel mode DNS, etc.).</p>
+                       <ul>
+                           <li><strong>MTN:</strong> <code>129.0.168.10</code> (Souvent avec une limite de data journalière de ~50Mo).</li>
+                           <li><strong>ORANGE:</strong> <code>41.202.217.132</code> | <code>abouttrexima.com</code> (Le DNS est souvent illimité).</li>
+                           <li><strong>YOOMEE:</strong> <code>41.78.204.43</code> (Illimité).</li>
+                           <li><strong>CAMTEL:</strong> <code>195.24.192.33</code> (Illimité, très efficace pour le DNS Tunneling).</li>
+                       </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><i class="fas fa-file-code"></i>Banque de Payloads Prêts à Copier</summary>
+                    <div class="details-content">
+                        <p>Remplacez <code>Host-Ici.com</code> par un host fonctionnel de la liste ci-dessus.</p>
+                        <h4>Payload simple (SocksIP/HA Tunnel)</h4>
+                        <p>Le plus basique, mais souvent suffisant.</p>
+                        <code>HTTP/1.1 200 ok[crlf]Host: Host-Ici.com[crlf]Connection: Keep-Alive[crlf]Proxy-Connection: Keep-Alive[crlf]</code>
+                        <h4>Payload avec User-Agent (pour AnonyTun/Stark)</h4>
+                        <p>Le User-Agent aide à simuler un vrai navigateur mobile.</p>
+                        <code>GET http://Host-Ici.com/ HTTP/1.1[crlf]Host: Host-Ici.com[crlf]Connection: keep-alive[crlf]User-Agent: Dalvik/2.1.0 (Linux; Android 10)[crlf]</code>
+                        <h4>Payload complexe avec X-Online-Host (très efficace)</h4>
+                        <p>Ce payload utilise plusieurs en-têtes pour mieux masquer le trafic.</p>
+                        <code>CONNECT [host_port] [protocol][crlf]Host: Host-Ici.com[crlf]X-Online-Host: Host-Ici.com[crlf]X-Forwarded-Host: Host-Ici.com[crlf]Connection: Keep-Alive[crlf]User-Agent: [ua][crlf]</code>
+                    </div>
+                </details>
+
+                 <details>
+                     <summary><i class="fas fa-cogs"></i>Astuces & Dépannage</summary>
+                    <div class="details-content">
+                         <h4>Débit coupé ? Le trick du Mode Avion !</h4>
+                         <p>La solution la plus célèbre et efficace quand une config ne se connecte plus ou que le débit chute :</p>
+                         <ol>
+                             <li>Activez le mode avion. Attendez 5 à 10 secondes.</li>
+                             <li>Désactivez le mode avion.</li>
+                             <li>Dès que le sigle 4G/3G/H+ réapparaît à l'écran, cliquez **immédiatement** sur "START" ou "CONNECT" dans votre application VPN. Cette fraction de seconde est cruciale.</li>
+                         </ol>
+                         <h4>Partager vos configurations</h4>
+                         <p>Des applications comme SocksIP ou Stark VPN permettent d'exporter vos configurations. Cherchez l'option <strong>"Export Config"</strong>. Vous pourrez ainsi bloquer le host/payload pour qu'ils ne soient pas visibles, ajouter une date d'expiration, un message personnalisé ou même un mot de passe pour partager vos trouvailles en toute sécurité.</p>
+                     </div>
+                 </details>
+            </section>
+            
+            <section id="communaute" class="section" style="border-top:none;">
+                <div class="cta-card">
+                     <div class="card-icon"><i class="fab fa-telegram-plane"></i></div>
+                    <h3>Envie d'aller plus loin ? La source N°1</h3>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; font-size:1.1rem; color: var(--text-muted);">Ce site vous donne des bases solides, mais le monde du Free Surf évolue chaque jour. Pour obtenir les tutoriels les plus récents, des configs pour d'autres pays et l'aide de la communauté, le bot 70s est la ressource indispensable.</p>
+                    <a href="https://t.me/Solutions70Bot" target="_blank" rel="noopener noreferrer" class="btn">
+                        <i class="fas fa-robot"></i> Accéder au Bot Officiel de 70s
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    
+    <footer class="site-footer" id="contact">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h4><i class="fas fa-hands-helping"></i> Hommage à 70 Solutions</h4>
+                <p>Ce guide est un hommage à la communauté "70s" et à son fondateur Elvis Naza. La mission est de rendre la connaissance accessible pour favoriser l'autonomie de chacun.</p>
+            </div>
+            <div class="footer-column">
+                <h4><i class="fas fa-user-astronaut"></i> Mes Contacts (Joker)</h4>
+                <ul>
+                    <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/2250595762779" target="_blank">WhatsApp</a></li>
+                    <li><i class="fab fa-telegram"></i> <a href="https://t.me/Joker_smiler" target="_blank">Telegram</a></li>
+                    <li><i class="fas fa-envelope"></i> <a href="mailto:es2iprompter@gmail.com">es2iprompter@gmail.com</a></li>
+                </ul>
+            </div>
+             <div class="footer-column">
+                <h4><i class="fas fa-link"></i> Liens Essentiels</h4>
+                <ul>
+                    <li><i class="fab fa-telegram-plane"></i> <a href="https://t.me/Solutions_G70" target="_blank">Canal Officiel 70s</a></li>
+                    <li><i class="fas fa-file-pdf"></i> <a href="FREESURF COMPLET AU 237.pdf" target="_blank">PDF Free Surf (Guide Complet 237)</a></li>
+                    <li><i class="fas fa-robot"></i> <a href="https://t.me/Solutions70Bot" target="_blank">Bot de Tutoriels 70s</a></li>
+                    <li><i class="fas fa-shopping-cart"></i> <a href="https://shopingjasmith.netlify.app/" target="_blank">Mon Site E-commerce</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Conçu par Joker avec passion. © 2025 - Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bouton de retour en haut -->
+    <a href="#page-top" id="scrollToTopBtn" title="Retour en haut"><i class="fas fa-arrow-up"></i></a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // === GESTIONNAIRE DE THÈME ===
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeNameSpan = document.getElementById('theme-name');
+            const htmlElement = document.documentElement;
+            const themes = ['light', 'dark', 'hacker'];
+            const themeLabels = { light: 'Clair', dark: 'Sombre', hacker: 'Hacker' };
+            let currentThemeIndex = 0;
+            const savedTheme = localStorage.getItem('siteTheme');
+            if (savedTheme) {
+                const savedIndex = themes.indexOf(savedTheme);
+                if (savedIndex !== -1) { currentThemeIndex = savedIndex; }
+            }
+            function updateTheme() {
+                const newTheme = themes[currentThemeIndex];
+                themes.forEach(theme => htmlElement.classList.remove(`theme-${theme}`));
+                htmlElement.classList.add(`theme-${newTheme}`);
+                if (themeNameSpan) { themeNameSpan.textContent = themeLabels[newTheme]; }
+                localStorage.setItem('siteTheme', newTheme);
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                    updateTheme();
+                });
+            }
+            updateTheme();
+
+            // === GESTIONNAIRE DU BOUTON "RETOUR EN HAUT" ===
+            const scrollTopButton = document.getElementById('scrollToTopBtn');
+            if(scrollTopButton) {
+                window.onscroll = function() {
+                    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+                        scrollTopButton.style.display = "block";
+                        setTimeout(() => { scrollTopButton.style.opacity = "1"; }, 10);
+                    } else {
+                        scrollTopButton.style.opacity = "0";
+                        setTimeout(() => { 
+                             if(document.body.scrollTop < 250 && document.documentElement.scrollTop < 250) {
+                                scrollTopButton.style.display = "none"; 
+                             }
+                        }, 300);
+                    }
+                };
+            }
+        });
+    </script>
+</body>
+</html>

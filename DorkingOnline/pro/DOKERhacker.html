@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DorkMaster Pro | Ultimate OSINT Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a12;
+            --bg-darker: #050508;
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #00ff88;
+            --accent-dark: #00cc6a;
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --danger: #ff3860;
+            --warning: #ffdd57;
+            --success: #00d1b2;
+            --border: #2a2a3a;
+            --glow: 0 0 10px rgba(0, 255, 136, 0.3);
+            --font-main: 'JetBrains Mono', monospace;
+            --font-display: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 136, 0.03) 0%, transparent 20%);
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Style */
+        .site-header {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .site-header::after {
+            content: "";
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin-top: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .site-header h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 400;
+            background: linear-gradient(90deg, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .site-header p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Tool Section */
+        .tool-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .tool-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .tool-sidebar {
+            background: var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--glow);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preset-list {
+            list-style: none;
+        }
+
+        .preset-item {
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+
+        .preset-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid var(--accent);
+        }
+
+        .preset-item.active {
+            background: rgba(0, 255, 136, 0.15);
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Main Tool */
+        .search-tool {
+            background: var(--primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: var(--glow);
+            overflow: hidden;
+        }
+
+        .tool-header {
+            background: var(--secondary);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tool-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .tool-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .search-form {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input {
+            accent-color: var(--accent);
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+            font-size: 0.7rem;
+        }
+
+        .form-select {
+            appearance: none;
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            margin-top: 2rem;
+            background: var(--primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-header {
+            background: var(--secondary);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-content {
+            padding: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .result-url {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .result-snippet {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .disclaimer {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            padding: 1.5rem;
+            background: rgba(255, 55, 95, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--danger);
+        }
+
+        .disclaimer strong {
+            color: var(--danger);
+        }
+
+        /* Terminal Effect */
+        .terminal-effect {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            color: var(--accent);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .terminal-prompt {
+            margin-right: 0.5rem;
+        }
+
+        .terminal-text {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Animations */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <div class="logo">
+                <i class="fas fa-terminal logo-icon"></i>
+                <h1>DORKMASTER PRO</h1>
+            </div>
+            <p>Advanced OSINT and Vulnerability Research Tool</p>
+        </header>
+
+        <main>
+            <div class="tool-container">
+                <!-- Sidebar with Presets -->
+                <aside class="tool-sidebar">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-folder-open"></i> QUICK PRESETS
+                    </h3>
+                    <ul class="preset-list" id="presetList">
+                        <li class="preset-item active" data-preset="general">General Web Search</li>
+                        <li class="preset-item" data-preset="vulnerabilities">Vulnerability Scan</li>
+                        <li class="preset-item" data-preset="exposed_files">Exposed Files</li>
+                        <li class="preset-item" data-preset="credentials">Credentials Leaks</li>
+                        <li class="preset-item" data-preset="social_profiles">Social Media Profiles</li>
+                        <li class="preset-item" data-preset="email_search">Email Address Search</li>
+                        <li class="preset-item" data-preset="database_dumps">Database Dumps</li>
+                        <li class="preset-item" data-preset="admin_panels">Admin Panels</li>
+                        <li class="preset-item" data-preset="camera_feeds">Camera Feeds</li>
+                        <li class="preset-item" data-preset="api_keys">API Keys</li>
+                    </ul>
+                </aside>
+
+                <!-- Main Tool -->
+                <section class="search-tool">
+                    <div class="tool-header">
+                        <div class="tool-title">
+                            <i class="fas fa-search"></i>
+                            <span>DORK QUERY BUILDER</span>
+                        </div>
+                        <div class="tool-status">
+                            <span class="status-indicator"></span>
+                            <span>READY</span>
+                        </div>
+                    </div>
+
+                    <form id="dorkForm" class="search-form" autocomplete="off">
+                        <div class="form-group">
+                            <label for="query" class="form-label">
+                                SEARCH TERMS
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Enter keywords, phrases, or specific data you're looking for</span>
+                                </span>
+                            </label>
+                            <input type="text" id="query" class="form-control" placeholder="e.g. 'admin login', 'password', '@gmail.com'" required>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="targetDomain" class="form-label">
+                                    TARGET DOMAIN
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltip-text">Limit search to specific domain (e.g. example.com)</span>
+                                    </span>
+                                </label>
+                                <input type="text" id="targetDomain" class="form-control" placeholder="example.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="excludeTerms" class="form-label">
+                                    EXCLUDE TERMS
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltip-text">Terms to exclude from results (space separated)</span>
+                                    </span>
+                                </label>
+                                <input type="text" id="excludeTerms" class="form-control" placeholder="test dev example">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">SEARCH MODE</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="searchMode" value="exact" checked>
+                                    Exact Phrase
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="searchMode" value="flexible">
+                                    Flexible Terms
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="searchMode" value="advanced">
+                                    Advanced Syntax
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="searchType" class="form-label">
+                                    SEARCH TYPE
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltip-text">Type of content or vulnerability to search for</span>
+                                    </span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="searchType" class="form-select">
+                                        <optgroup label="General Search">
+                                            <option value="general">Web Pages</option>
+                                            <option value="historical_data">Historical Data</option>
+                                        </optgroup>
+                                        <optgroup label="Files & Documents">
+                                            <option value="pdf_files">PDF Documents</option>
+                                            <option value="word_docs">Word Documents</option>
+                                            <option value="excel_files">Excel Files</option>
+                                            <option value="text_files">Text Files</option>
+                                            <option value="database_dumps">Database Dumps</option>
+                                        </optgroup>
+                                        <optgroup label="Vulnerabilities">
+                                            <option value="login_pages">Login Pages</option>
+                                            <option value="admin_panels">Admin Panels</option>
+                                            <option value="config_files">Config Files</option>
+                                            <option value="backup_files">Backup Files</option>
+                                            <option value="error_messages">Error Messages</option>
+                                        </optgroup>
+                                        <optgroup label="OSINT">
+                                            <option value="social_profiles">Social Profiles</option>
+                                            <option value="email_search">Email Addresses</option>
+                                            <option value="api_keys">API Keys</option>
+                                            <option value="credentials">Credentials</option>
+                                        </optgroup>
+                                        <optgroup label="Network">
+                                            <option value="camera_feeds">Camera Feeds</option>
+                                            <option value="network_devices">Network Devices</option>
+                                            <option value="open_ports">Open Ports</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="searchEngine" class="form-label">
+                                    SEARCH ENGINE
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltip-text">Select which search engine to use</span>
+                                    </span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="searchEngine" class="form-select"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-block">
+                            <i class="fas fa-bolt"></i> EXECUTE SEARCH
+                        </button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Results Panel (hidden by default) -->
+            <div class="results-panel" id="resultsPanel">
+                <div class="results-header">
+                    <div class="tool-title">
+                        <i class="fas fa-list"></i>
+                        <span>SEARCH RESULTS</span>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-indicator"></span>
+                        <span>3 RESULTS FOUND</span>
+                    </div>
+                </div>
+                <div class="results-content">
+                    <div class="result-item">
+                        <div class="result-title">Admin Login Page</div>
+                        <div class="result-url">https://example.com/admin/login.php</div>
+                        <div class="result-snippet">Admin login page for example.com with default credentials admin:admin</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-title">Database Backup File</div>
+                        <div class="result-url">https://example.com/backups/db_backup.sql</div>
+                        <div class="result-snippet">MySQL database backup file containing user credentials and sensitive data</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-title">Exposed Config File</div>
+                        <div class="result-url">https://example.com/config.ini</div>
+                        <div class="result-snippet">Configuration file containing database credentials and API keys</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="disclaimer">
+                <strong>ETHICAL WARNING:</strong> This tool is provided for educational and legitimate security research purposes only. 
+                Unauthorized scanning or accessing of systems without permission is illegal. The developers assume no liability 
+                and are not responsible for any misuse or damage caused by this program.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Terminal Effect -->
+    <div class="terminal-effect">
+        <span class="terminal-prompt">></span>
+        <span class="terminal-text" id="terminalText">Initializing DorkMaster Pro v2.4.1 | System Ready</span>
+        <span class="blink">_</span>
+    </div>
+
+    <script>
+        // Configuration data
+        const fileExtensions = {
+            pdf_files: ["pdf"],
+            word_docs: ["doc", "docx", "odt", "rtf"],
+            excel_files: ["xls", "xlsx", "ods", "csv"],
+            text_files: ["txt", "log", "md"],
+            database_dumps: ["sql", "bak", "mdb", "dump"],
+            config_files: ["conf", "config", "ini", "env", "properties"],
+            backup_files: ["bak", "backup", "old", "temp"],
+            credentials: ["passwd", "shadow", "htpasswd", "htaccess"]
+        };
+
+        const searchEngines = [
+            { name: "Google", value: "google", baseUrl: "https://www.google.com/search?q=", cats: ["general","historical_data","pdf_files","word_docs","excel_files","text_files","database_dumps","login_pages","admin_panels","config_files","backup_files","error_messages","social_profiles","email_search","api_keys","credentials","camera_feeds","network_devices","open_ports"], dork: true },
+            { name: "Shodan", value: "shodan", baseUrl: "https://www.shodan.io/search?query=", cats: ["network_devices","open_ports","camera_feeds"], dork: false },
+            { name: "Censys", value: "censys", baseUrl: "https://search.censys.io/search?resource=hosts&q=", cats: ["network_devices","open_ports"], dork: false },
+            { name: "Grep.app", value: "grep_app", baseUrl: "https://grep.app/search?q=", cats: ["config_files","credentials","api_keys"], dork: false },
+            { name: "BinaryEdge", value: "binaryedge", baseUrl: "https://app.binaryedge.io/services/query?query=", cats: ["network_devices","open_ports"], dork: false },
+            { name: "Hunter.io", value: "hunter_io", baseUrl: "https://hunter.io/try/search?query=", cats: ["email_search"], dork: false },
+            { name: "FOFA", value: "fofa", baseUrl: "https://en.fofa.info/result?qbase64=", cats: ["network_devices","camera_feeds"], dork: false, base64: true },
+            { name: "LeakIX", value: "leakix", baseUrl: "https://leakix.net/search?q=", cats: ["credentials","database_dumps"], dork: false },
+            { name: "IntelX", value: "intelx", baseUrl: "https://intelx.io/?s=", cats: ["email_search","credentials"], dork: false },
+            { name: "PublicWWW", value: "publicwww", baseUrl: "https://publicwww.com/websites/", cats: ["api_keys","credentials"], dork: false },
+            { name: "Vulners", value: "vulners", baseUrl: "https://vulners.com/search?query=", cats: ["error_messages"], dork: false },
+            { name: "Archive.org", value: "archive_org", baseUrl: "https://web.archive.org/web/*/", cats: ["historical_data"], dork: false },
+            { name: "OnionSearch", value: "onionsearch", baseUrl: "https://onionsearchengine.com/search?q=", cats: ["general"], dork: false }
+        ];
+
+        const presets = {
+            general: {
+                query: "",
+                type: "general",
+                mode: "flexible"
+            },
+            vulnerabilities: {
+                query: "inurl:login OR inurl:admin OR intitle:\"admin login\"",
+                type: "login_pages",
+                mode: "advanced"
+            },
+            exposed_files: {
+                query: "intitle:\"index of\" (sql|bak|mdb|backup)",
+                type: "database_dumps",
+                mode: "advanced"
+            },
+            credentials: {
+                query: "filetype:log intext:password OR filetype:env DB_PASSWORD",
+                type: "credentials",
+                mode: "advanced"
+            },
+            social_profiles: {
+                query: "site:facebook.com OR site:twitter.com OR site:linkedin.com \"John Doe\"",
+                type: "social_profiles",
+                mode: "advanced"
+            },
+            email_search: {
+                query: "\"@gmail.com\" OR \"@yahoo.com\" filetype:csv",
+                type: "email_search",
+                mode: "advanced"
+            },
+            database_dumps: {
+                query: "intitle:\"index of\" *.sql OR *.bak OR *.dump",
+                type: "database_dumps",
+                mode: "advanced"
+            },
+            admin_panels: {
+                query: "inurl:/admin/login.php OR inurl:/wp-admin",
+                type: "admin_panels",
+                mode: "advanced"
+            },
+            camera_feeds: {
+                query: "inurl:/view.shtml OR inurl:/view/index.shtml",
+                type: "camera_feeds",
+                mode: "advanced"
+            },
+            api_keys: {
+                query: "\"api_key\" OR \"api_secret\" filetype:env",
+                type: "api_keys",
+                mode: "advanced"
+            }
+        };
+
+        // DOM Elements
+        const form = document.getElementById('dorkForm');
+        const queryInput = document.getElementById('query');
+        const domainInput = document.getElementById('targetDomain');
+        const excludeInput = document.getElementById('excludeTerms');
+        const typeSelect = document.getElementById('searchType');
+        const engineSelect = document.getElementById('searchEngine');
+        const presetItems = document.querySelectorAll('.preset-item');
+        const terminalText = document.getElementById('terminalText');
+        const resultsPanel = document.getElementById('resultsPanel');
+
+        // Terminal messages
+        const terminalMessages = [
+            "Loading DorkMaster Pro modules...",
+            "Establishing secure connection...",
+            "Initializing search algorithms...",
+            "System ready for queries",
+            "Connected to 12 search engines",
+            "Security protocols active",
+            "Monitoring network traffic"
+        ];
+
+        // Rotate terminal messages
+        let messageIndex = 0;
+        function rotateTerminalMessage() {
+            terminalText.textContent = terminalMessages[messageIndex];
+            messageIndex = (messageIndex + 1) % terminalMessages.length;
+        }
+        setInterval(rotateTerminalMessage, 3000);
+
+        // Update engine options based on selected type
+        function updateEngineOptions() {
+            const selectedType = typeSelect.value;
+            engineSelect.innerHTML = '';
+            
+            const relevantEngines = searchEngines.filter(engine => 
+                engine.cats.includes(selectedType)
+            );
+            
+            relevantEngines.forEach(engine => {
+                const option = document.createElement('option');
+                option.value = engine.value;
+                option.textContent = engine.name;
+                engineSelect.appendChild(option);
+            });
+            
+            if (relevantEngines.length > 0) {
+                engineSelect.disabled = false;
+            } else {
+                engineSelect.disabled = true;
+                const option = document.createElement('option');
+                option.textContent = "No engines available";
+                engineSelect.appendChild(option);
+            }
+        }
+
+        // Apply preset
+        function applyPreset(presetKey) {
+            const preset = presets[presetKey];
+            
+            // Update form fields
+            queryInput.value = preset.query;
+            typeSelect.value = preset.type;
+            
+            // Set search mode radio
+            document.querySelector(`input[name="searchMode"][value="${preset.mode}"]`).checked = true;
+            
+            // Update engine options
+            updateEngineOptions();
+            
+            // Show notification in terminal
+            terminalText.textContent = `Preset loaded: ${presetKey.replace('_', ' ')}`;
+        }
+
+        // Build dork query
+        function buildDork() {
+            const query = queryInput.value.trim();
+            const domain = domainInput.value.trim();
+            const excludes = excludeInput.value.trim();
+            const searchMode = document.querySelector('input[name="searchMode"]:checked').value;
+            const searchType = typeSelect.value;
+            let parts = [];
+
+            // Main query part
+            let queryPart = "";
+            if (query) {
+                if (searchMode === 'exact') {
+                    queryPart = `"${query}"`;
+                } else if (searchMode === 'flexible') {
+                    queryPart = `(${query.split(/\s+/).join(' AND ')})`;
+                } else {
+                    // Advanced mode - use query as is
+                    queryPart = query;
+                }
+            }
+            
+            // Add file extensions if applicable
+            const extensions = fileExtensions[searchType];
+            if (extensions) {
+                const formatBlock = `(${extensions.map(ext => `ext:${ext}`).join(' OR ')})`;
+                parts.push(formatBlock);
+            }
+            
+            // Add special conditions based on search type
+            switch(searchType) {
+                case 'login_pages':
+                    parts.push('inurl:login OR inurl:admin OR intitle:"admin login"');
+                    break;
+                case 'admin_panels':
+                    parts.push('inurl:/admin/ OR inurl:/wp-admin/ OR intitle:"admin panel"');
+                    break;
+                case 'config_files':
+                    parts.push('intitle:"index of" (config|conf|ini|env)');
+                    break;
+                case 'backup_files':
+                    parts.push('intitle:"index of" (backup|bak|old|temp)');
+                    break;
+                case 'social_profiles':
+                    parts.push(
+                        'site:facebook.com OR site:twitter.com OR site:linkedin.com OR ' +
+                        'site:instagram.com OR site:tiktok.com OR site:reddit.com'
+                    );
+                    break;
+                case 'email_search':
+                    parts.push('("@gmail.com" OR "@yahoo.com" OR "@outlook.com")');
+                    break;
+                case 'api_keys':
+                    parts.push('("api_key" OR "api_secret" OR "access_token")');
+                    break;
+                case 'credentials':
+                    parts.push('("password" OR "passwd" OR "credentials")');
+                    break;
+                case 'camera_feeds':
+                    parts.push('inurl:/view.shtml OR inurl:/view/index.shtml OR inurl:/axis-cgi/jpg');
+                    break;
+                case 'network_devices':
+                    parts.push('title:"router" OR title:"switch" OR title:"firewall"');
+                    break;
+            }
+            
+            // Add the main query part
+            if (queryPart) {
+                parts.unshift(queryPart);
+            }
+            
+            // Add domain restriction if specified
+            if (domain) {
+                parts.push(`site:${domain}`);
+            }
+            
+            // Add excluded terms if specified
+            if (excludes) {
+                parts.push(...excludes.split(/\s+/).map(term => `-${term}`));
+            }
+            
+            return parts.join(' ');
+        }
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = queryInput.value.trim();
+            if (!query) {
+                terminalText.textContent = "ERROR: Search query cannot be empty";
+                return;
+            }
+
+            const engine = searchEngines.find(e => e.value === engineSelect.value);
+            if (!engine) {
+                terminalText.textContent = "ERROR: Please select a valid search engine";
+                return;
+            }
+            
+            // Show loading state
+            terminalText.textContent = "Executing search query...";
+            
+            // Build the search URL
+            let searchTerm = engine.dork ? buildDork() : query;
+            let finalUrl = engine.baseUrl;
+            
+            if (engine.base64) {
+                finalUrl += btoa(searchTerm);
+            } else if (engine.value === 'archive_org') {
+                finalUrl += searchTerm;
+            } else {
+                finalUrl += encodeURIComponent(searchTerm);
+            }
+            
+            // Open in new tab after a small delay for UX
+            setTimeout(() => {
+                window.open(finalUrl, '_blank');
+                terminalText.textContent = `Search executed on ${engine.name}`;
+                
+                // Show sample results panel (demo only)
+                resultsPanel.style.display = 'block';
+            }, 500);
+        });
+
+        // Preset selection
+        presetItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Update active state
+                presetItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Apply the preset
+                const presetKey = this.dataset.preset;
+                applyPreset(presetKey);
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateEngineOptions();
+            applyPreset('general');
+            
+            // Show initial terminal message
+            terminalText.textContent = "DorkMaster Pro initialized. Ready for queries.";
+        });
+    </script>
+</body>
+</html>

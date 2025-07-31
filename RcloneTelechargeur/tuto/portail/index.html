@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Découvrez La Boîte à Outils EXE, une collection d'applications portables pour Windows. Téléchargez, décompressez et utilisez sans installation.">
+    <title>La Boîte à Outils EXE | Applications Portables par Joker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="./favi/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a12; --primary: #1a1a2e; --secondary: #16213e; --accent: #00ff88;
+            --text-main: #e0e0e0; --text-dim: #a0a0a0; --border: #2a2a3a; --glow: 0 0 15px rgba(0, 255, 136, 0.2);
+            --font-main: 'JetBrains Mono', monospace; --font-display: 'Share Tech Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: var(--font-main); background-color: var(--bg-dark); color: var(--text-main); line-height: 1.7; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+
+        .site-header { position: sticky; top: 0; z-index: 1000; background-color: rgba(10, 10, 18, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .logo { font-family: var(--font-display); font-size: 1.8rem; color: var(--accent); text-decoration: none; }
+        .main-nav { display: flex; gap: 2rem; }
+        .main-nav a { color: var(--text-dim); text-decoration: none; font-size: 1rem; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--accent); }
+
+        .hero-section { text-align: center; padding: 6rem 2rem; background-image: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 40%); }
+        .hero-section h1 { font-family: var(--font-display); font-size: 3.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .hero-section p { font-size: 1.2rem; color: var(--text-dim); max-width: 700px; margin: 0 auto 2.5rem; }
+        .btn { padding: 1rem 2rem; background: var(--accent); color: var(--bg-dark); border: none; border-radius: 4px; font-family: var(--font-main); font-weight: bold; font-size: 1.1rem; cursor: pointer; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.75rem; }
+        .btn:hover { background-color: #00cc6a; box-shadow: var(--glow); transform: translateY(-3px); }
+
+        .section { padding: 5rem 0; border-top: 1px solid var(--border); }
+        .section-title { font-family: var(--font-display); font-size: 2.5rem; text-align: center; margin-bottom: 3rem; color: var(--accent); }
+        .section-title::before { content: "// "; color: var(--text-dim); }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .tool-card { background: var(--primary); padding: 2rem; border-radius: 8px; border-left: 3px solid var(--accent); box-shadow: var(--glow); display: flex; flex-direction: column; transition: transform 0.2s ease; }
+        .tool-card:hover { transform: translateY(-5px); }
+        .tool-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 0.75rem; }
+        .tool-card p { color: var(--text-dim); flex-grow: 1;}
+        .tool-card code { background-color: var(--secondary); padding: 2px 5px; border-radius: 3px; font-size: 0.85em; }
+
+        .package-content pre { background: #050508; border: 1px solid var(--border); border-radius: 8px; padding: 2rem; white-space: pre-wrap; word-wrap: break-word; color: var(--text-dim); font-size: 1rem; }
+        .package-content .folder { color: #58a6ff; }
+        .package-content .executable { color: var(--accent); }
+        .package-content .comment { color: #888; }
+        
+        .info-box { background: var(--secondary); padding: 1.5rem; border-left: 3px solid var(--accent); border-radius: 4px; margin-top: 2rem; text-align: left; }
+
+        .super-footer { background-color: #08080f; padding: 4rem 2rem 2rem; border-top: 1px solid var(--border); margin-top: 4rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-column h4 { font-family: var(--font-display); font-size: 1.5rem; color: var(--accent); margin-bottom: 1.5rem; }
+        .footer-column p, .footer-column a { color: var(--text-dim); text-decoration: none; transition: color 0.2s ease; }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+        .footer-column li i { color: var(--accent); width: 20px; text-align: center; }
+        .footer-column a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem; }
+        
+        @media (max-width: 768px) { .main-nav { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="#" class="logo">Joker's Tools EXE</a>
+            <div class="main-nav">
+                <a href="#tools">Les Outils</a>
+                <a href="#package">Structure</a>
+                <a href="#download">Télécharger</a>
+                <a href="contact.html" target="_blank">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <h1>La Boîte à Outils EXE</h1>
+                <p>Une suite complète d'applications portables pour Windows. Aucun besoin d'installer Python ou des dépendances. Téléchargez, décompressez, et utilisez !</p>
+                <a href="#download" class="btn"><i class="fas fa-download"></i> Télécharger le Pack Complet</a>
+            </div>
+        </section>
+
+        <section class="section container" id="tools">
+            <h2 class="section-title">Présentation des Outils</h2>
+            <div class="tools-grid">
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-cloud-download-alt"></i>Rclone Telechargeur</h3>
+                    <p>Téléchargez des dossiers volumineux depuis Google Drive sans la compression <code>.zip</code> habituelle, pour des transferts plus rapides et plus fiables. Nécessite l'exécutable Rclone inclus dans son dossier.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-link"></i>Analyseur de Liens GDrive</h3>
+                    <p>Fournissez un fichier <code>.txt</code> de liens Google Drive et l'outil les triera automatiquement en deux fichiers : <code>liens_valides.txt</code> et <code>liens_invalides.txt</code>. Fini le gaspillage de temps !</p>
+                </div>
+                
+                 <div class="tool-card">
+                    <h3><i class="fas fa-file-pdf"></i>Extracteurs de Liens PDF</h3>
+                    <p>Deux versions pour extraire les URLs de vos PDF. Une version <code>simple</code> pour les liens visibles et une version <code>bizzare</code> (complète) pour tous les liens, même ceux cachés dans le texte.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-cogs"></i>Convertisseur PY en EXE</h3>
+                    <p>Transformez facilement vos propres scripts Python <code>.py</code> en applications exécutables <code>.exe</code> portables, comme celles de ce pack. Une version compilée du premier outil de la suite.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-eye-slash"></i>FiltreImage</h3>
+                    <p>Un outil à but éducatif pour trier rapidement vos photos. Scanne un dossier, détecte les images potentiellement sensibles et les déplace dans un sous-dossier pour vérification.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-box-open"></i>Globale Tools (Beta)</h3>
+                    <p>Une application "tout-en-un" qui regroupe les fonctionnalités de plusieurs outils de cette suite dans une seule interface légère. Parfait pour un accès rapide aux fonctions essentielles.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section container" id="package">
+            <h2 class="section-title">Structure du Pack & Utilisation</h2>
+            <p style="text-align: center; max-width: 700px; margin: -2rem auto 2.5rem; color: var(--text-dim);">Après décompression, vous obtiendrez l'arborescence suivante. Pour utiliser un outil, allez simplement dans son dossier, puis dans <code>/dist/</code> et double-cliquez sur le fichier <code>.exe</code>.</p>
+            <div class="package-content">
+<pre>
+<span class="folder">MES APPLICATION EXE/</span>
+|
+|--- <span class="folder">analyseur de lien gogole drive/</span>
+|    \--- <span class="folder">dist/</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> AnalyseurDeLienGoogleDrive.exe</span>
+|
+|--- <span class="folder">FiltreImage/</span>
+|    \--- <span class="folder">dist/</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> imagefiltrerByDossier.exe</span>
+|
+|--- <span class="folder">Globale Tools beta/</span>
+|    \--- <span class="folder">dist/</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> GlobalJokerTools.exe</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> rclone.exe <span class="comment">(essentiel)</span></span>
+|--- <span class="folder">LE CONVERTISUER DE PY EN EXE/</span>
+|    \--- <span class="folder">dist/</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> ConvertiseurPythonInEXE.exe</span>
+|
+|--- <span class="folder">les extrateurs de lien dans pdf/</span>
+|    |--- <span class="folder">$bizzare/dist/</span>
+|    |    \--- <span class="executable"><i class="fas fa-terminal"></i> PdfTextLinker.exe</span>
+|    \--- <span class="folder">$simple/dist/</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> PdfLinkSimple.exe</span>
+|
+|--- <span class="folder">Rclone telechargeur/</span>
+|    \--- <span class="folder">dist/</span>
+|         |--- <span class="executable"><i class="fas fa-terminal"></i> RcloneTelechargeur.exe</span>
+|         \--- <span class="executable"><i class="fas fa-terminal"></i> rclone.exe <span class="comment">(essentiel)</span></span>
+|
+\--- <span class="comment">(@convertiseur est la version script du convertisseur)</span>
+</pre>
+            </div>
+            <div class="info-box">
+                <p><i class="fas fa-exclamation-triangle"></i> <strong>Rappel :</strong> Votre système peut afficher un avertissement de sécurité car les fichiers ne sont pas signés. C'est normal, vous pouvez les exécuter sans crainte.</p>
+            </div>
+        </section>
+
+        <section class="section container" id="download" style="text-align:center;">
+            <h2 class="section-title">Téléchargement</h2>
+            <p style="max-width: 600px; margin: -2rem auto 2.5rem; color: var(--text-dim);">Obtenez la suite complète, incluant tous les outils prêts à l'emploi, dans une seule archive ZIP.</p>
+            <a href="./tuneling.html" class="btn"><i class="fas fa-archive"></i> Télécharger la Boîte à Outils (.zip)</a>
+        </section>
+    </main>
+
+    <footer class="super-footer">
+        <div class="container">
+            <div class="footer-grid">
+
+                <div class="footer-column">
+                    <h4>À Propos du Projet</h4>
+                    <p>Une collection d'applications portables conçues pour automatiser les tâches répétitives et améliorer votre productivité.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Me Contacter</h4>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/2250595762779" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+                        <li><i class="fab fa-telegram"></i><a href="https://t.me/Joker_smiler" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+                        <li><i class="fas fa-envelope"></i><a href="mailto:es2iprompter@gmail.com">es2iprompter@gmail.com</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Autres Liens</h4>
+                    <ul>
+                         <li><i class="fas fa-shopping-cart"></i><a href="https://shopingjasmith.netlify.app/" target="_blank" rel="noopener noreferrer">Mon E-commerce</a></li>
+                         <li><i class="fas fa-life-ring"></i><a href="contact.html">Support / Contact</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 - La Boîte à Outils EXE. Un projet de Joker. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

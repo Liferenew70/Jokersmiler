@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | Mon Portfolio</title>
+    <link rel="shortcut icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* Le CSS est identique à celui de index.html pour une cohérence parfaite */
+        :root {
+            --accent: #25D366; --accent-hover: #1DAA52; --accent-dark: #0a192f;
+            --bg-color-dark: #0a192f; --card-bg-dark: #1e293b; --text-color-dark: #a8b2d1; --heading-color-dark: #e2e8f0;
+            --bg-color-light: #f4f7f6; --card-bg-light: #ffffff; --text-color-light: #4a5568; --heading-color-light: #1e293b;
+            --bg-color: var(--bg-color-dark); --card-bg: var(--card-bg-dark); --text-color: var(--text-color-dark); --heading-color: var(--heading-color-dark);
+            --font-main: 'Poppins', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); font-family: var(--font-main); color: var(--text-color); line-height: 1.6; transition: background-color 0.3s ease, color 0.3s ease; }
+        body.light-mode { --bg-color: var(--bg-color-light); --card-bg: var(--card-bg-light); --text-color: var(--text-color-light); --heading-color: var(--heading-color-light); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; position: sticky; top: 0; background-color: rgba(10, 25, 47, 0.85); backdrop-filter: blur(10px); z-index: 10; transition: background-color 0.3s ease; }
+        body.light-mode header { background-color: rgba(255, 255, 255, 0.8); }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--heading-color); text-decoration: none; }
+        .header-nav { display: flex; align-items: center; gap: 1rem; }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--accent); }
+        #theme-switcher { background: none; border: none; cursor: pointer; color: var(--text-color); width: 24px; height: 24px; transition: color 0.3s ease; }
+        #theme-switcher:hover { color: var(--accent); }
+        #theme-switcher svg { width: 100%; height: 100%; fill: currentColor; }
+        
+        /* === Style de la page de contact === */
+        .contact-section {
+            padding: 100px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 600px;
+        }
+        .contact-container h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--heading-color);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .contact-container h2::after { content: ''; display: block; width: 60px; height: 4px; background: var(--accent); margin: 10px auto 0; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--heading-color); }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--text-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            font-family: var(--font-main);
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        textarea { resize: vertical; min-height: 120px; }
+        .btn-submit {
+            background-color: var(--accent);
+            color: var(--accent-dark);
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-submit:hover { background-color: var(--accent-hover); }
+
+        footer { background-color: var(--card-bg); padding: 4rem 10% 2rem; margin-top: 6rem; transition: background-color 0.3s ease; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .footer-column h4 { color: var(--heading-color); font-size: 1.2rem; margin-bottom: 1rem; }
+        .footer-column p, .footer-column a { color: var(--text-color); text-decoration: none; margin-bottom: 0.5rem; display: block; transition: color 0.3s ease; }
+        .footer-column a:hover { color: var(--accent); }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links svg { fill: var(--text-color); transition: fill 0.3s ease; }
+        .social-links a:hover svg { fill: var(--accent); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(168, 178, 209, 0.2); color: var(--text-color); }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">Mon Portfolio</a>
+    <nav class="header-nav">
+        <div class="nav-links">
+             <!-- LIEN DE RETOUR VERS LE PORTFOLIO -->
+            <a href="index.html">Retour au Portfolio</a>
+        </div>
+        <button id="theme-switcher" title="Changer de thème"></button>
+    </nav>
+</header>
+
+<main>
+    <section class="contact-section">
+        <div class="contact-container">
+            <h2>Laissez un message</h2>
+            <form id="contactForm">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required>
+
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" required>
+
+                <label for="note">Note du site :</label>
+                <select id="note" name="note" required>
+                    <option value="">-- Donnez votre avis --</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Très bon">Très bon</option>
+                    <option value="Bon">Bon</option>
+                    <option value="Moyen">Moyen</option>
+                    <option value="À améliorer">À améliorer</option>
+                </select>
+
+                <label for="message">Votre message :</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="button" class="btn-submit" onclick="envoyerMessage()">Envoyer sur WhatsApp</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <!-- Le footer est identique à celui de la page portfolio -->
+    <div class="footer-grid">
+        <div class="footer-column"><h4>À propos de moi</h4><p>Développeur web passionné par la création de solutions numériques qui sont à la fois élégantes et fonctionnelles. Mon objectif est de transformer des problèmes complexes en outils intuitifs.</p></div>
+        <div class="footer-column"><h4>Navigation</h4><a href="index.html">Accueil</a><a href="index.html#sites">Sites Web</a><a href="index.html#scripts">Scripts & Logiciels</a></div>
+        <div class="footer-column"><h4>Contact</h4><a href="mailto:jokersmiler67@gmail.com">jokersmiler67@gmail.com</a>
+            <div class="social-links">
+                <a href="#" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                <a href="#" title="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 - tout droit réservé à Touré Junior.</p></div>
+</footer>
+
+<script>
+    // --- Script d'envoi WhatsApp ---
+    function envoyerMessage() {
+        const nom = document.getElementById("nom").value.trim();
+        const prenom = document.getElementById("prenom").value.trim();
+        const note = document.getElementById("note").value;
+        const message = document.getElementById("message").value.trim();
+
+        if (!nom || !prenom || !note || !message) {
+            alert("Veuillez remplir tous les champs !");
+            return;
+        }
+        
+        alert("Parfait ! Votre message est prêt à être envoyé sur WhatsApp.");
+
+        const texte = `Bonjour ! 👋\n\n*Nom :* ${nom}\n*Prénom :* ${prenom}\n*Note du site :* ${note}\n\n*Message :*\n${message}`;
+        const lienWhatsApp = `https://wa.me/2250595762779?text=${encodeURIComponent(texte)}`;
+        window.open(lienWhatsApp, "_blank");
+    }
+
+    // --- Script pour le thème et autres fonctionnalités ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const body = document.body;
+        const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.364 5.636a.75.75 0 010 1.06l-1.591 1.591a.75.75 0 11-1.06-1.06l1.591-1.591a.75.75 0 011.06 0zM5.636 18.364a.75.75 0 01-1.06-1.06l1.591-1.591a.75.75 0 111.06 1.06l-1.591 1.591zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM3.75 12a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM5.636 5.636a.75.75 0 011.06 0l1.591 1.591a.75.75 0 01-1.06 1.06L5.636 6.7A.75.75 0 015.636 5.636zM18.364 18.364a.75.75 0 010-1.06l-1.591-1.591a.75.75 0 11-1.06 1.06l1.591 1.591a.75.75 0 011.06 0zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75z"/></svg>`;
+        const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path></svg>`;
+        const setTheme = (isLight) => { body.classList.toggle('light-mode', isLight); themeSwitcher.innerHTML = isLight ? moonIcon : sunIcon; localStorage.setItem('theme', isLight ? 'light' : 'dark'); };
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme) { setTheme(savedTheme === 'light'); } else { setTheme(!prefersDark); }
+        themeSwitcher.addEventListener('click', () => setTheme(!body.classList.contains('light-mode')));
+    });
+</script>
+
+</body>
+</html>

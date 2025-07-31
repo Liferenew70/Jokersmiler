@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta proprety="og:description" content="Bibliothèque de Ressources Dynamique Pro - Accédez à une collection de ressources éducatives et professionnelles. Importez vos propres fichiers JSON ou chargez la bibliothèque principale.">
+    <title>Bibliothèque de Ressources Dynamique Pro</title>
+    <link rel="shortcut icon" href="./fav/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-light: #f5f5f7; --text-light: #1d1d1f; --card-bg-light: #ffffff; --border-light: #d2d2d7; --header-bg-light: rgba(255, 255, 255, 0.8);
+            --bg-dark: #121212; --text-dark: #e0e0e0; --card-bg-dark: #1e1e1e; --border-dark: #333333; --header-bg-dark: rgba(18, 18, 18, 0.8);
+            --bg-hacker: #0a0a12; --text-hacker: #00ff88; --card-bg-hacker: #0d1117; --border-hacker: #2a2a3a; --header-bg-hacker: rgba(10, 10, 18, 0.8);
+            --accent-color: #ff6600; --accent-hover: #e65c00;
+            --bg: var(--bg-light); --text: var(--text-light); --card-bg: var(--card-bg-light); --border: var(--border-light); --header-bg: var(--header-bg-light);
+            --font-main: 'Poppins', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body.theme-dark { --bg: var(--bg-dark); --text: var(--text-dark); --card-bg: var(--card-bg-dark); --border: var(--border-dark); --header-bg: var(--header-bg-dark); }
+        body.theme-hacker { --bg: var(--bg-hacker); --text: var(--text-hacker); --card-bg: var(--card-bg-hacker); --border: var(--border-hacker); --header-bg: var(--header-bg-hacker); --accent-color: var(--text-hacker); --accent-hover: #00cc6a; font-family: var(--font-mono); }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-main); background-color: var(--bg); color: var(--text); transition: background-color 0.3s ease, color 0.3s ease; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .site-header { position: sticky; top: 0; width: 100%; z-index: 1000; padding: 1rem 0; background-color: var(--header-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); text-decoration: none; }
+        .main-nav { display: flex; align-items: center; gap: 2rem; }
+        .main-nav a { color: var(--text); text-decoration: none; font-weight: 600; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--accent-color); }
+        .nav-actions { display: flex; align-items: center; gap: 1rem; }
+        .nav-btn { background: none; border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: 600; }
+        .nav-btn:hover { background-color: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        #theme-switcher { width: 40px; height: 40px; border-radius: 50%; padding: 0; font-size: 1.2rem; }
+
+        #upload-section { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; }
+        #upload-section h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-color); }
+        #upload-section p { color: var(--text-dim, #6e6e73); margin-bottom: 2rem; }
+        .upload-options { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .upload-btn { font-size: 1.1rem; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+        #load-default-btn { background-color: var(--accent-color); color: white; }
+        #load-default-btn:hover { background-color: var(--accent-hover); }
+        #import-other-btn { background-color: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); }
+        #import-other-btn:hover { background-color: var(--accent-color); color: white; }
+        #main-content { display: none; }
+
+        .controls-section { padding: 3rem 0; }
+        .search-wrapper { position: relative; }
+        #search-input { width: 100%; padding: 1rem 3rem 1rem 3.5rem; font-size: 1.1rem; background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
+        .search-wrapper .fa-search { position: absolute; top: 50%; left: 1.2rem; transform: translateY(-50%); color: var(--text-dim, #6e6e73); }
+        #clear-search-btn { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); background: none; border: none; font-size: 1.2rem; color: var(--text-dim, #6e6e73); cursor: pointer; display: none; }
+
+        .main-category-title { font-size: 2.5rem; color: var(--accent-color); margin: 3rem 0 2rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; }
+        .sub-category-title { font-size: 1.8rem; color: var(--text); margin: 2.5rem 0 1.5rem; border-left: 3px solid var(--accent-color); padding-left: 1rem; }
+        .count-badge { font-size: 0.8rem; background-color: var(--accent-color); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px; font-family: var(--font-main); }
+        
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .resource-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; opacity: 0; animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+        .card-header h3 { font-size: 1.1rem; color: var(--text); word-wrap: break-word; }
+        .card-body { padding: 1.5rem; flex-grow: 1; color: var(--text-dim, #6e6e73); font-size: 0.95rem; }
+        .card-body ul { list-style: none; padding-left: 0; }
+        .card-body li { margin-bottom: 0.5rem; }
+        .card-body li::before { content: '✔️'; color: var(--accent-color); margin-right: 0.75rem; }
+        .card-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 1rem; margin-top: auto; }
+        .card-btn { background: none; border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .card-btn:hover { background-color: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        
+        body.theme-hacker::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2) 1px, transparent 1px, transparent 2px); pointer-events: none; z-index: 9999; animation: scanline 10s linear infinite; }
+        @keyframes scanline { 0% { background-position: 0 0; } 100% { background-position: 0 100vh; } }
+        .theme-hacker .card-header h3::after { content: '_'; animation: blink 1s step-end infinite; margin-left: 5px; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .super-footer { background-color: var(--card-bg); padding: 4rem 0 2rem; border-top: 1px solid var(--border); margin-top: 4rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-column h4 { font-size: 1.2rem; color: var(--accent-color); margin-bottom: 1.5rem; }
+        .footer-column p, .footer-column a { color: var(--text-dim, #6e6e73); text-decoration: none; transition: color 0.2s ease; }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;}
+        .footer-column a:hover { color: var(--accent-color); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-dim, #6e6e73); font-size: 0.9rem; }
+    </style>
+</head>
+<body class="theme-light">
+
+    <header class="site-header">
+        <div class="nav-container container">
+            <a href="#" class="logo">FormationHUB</a>
+            <nav class="main-nav">
+                <a href="#">Accueil</a>
+                <a href="#search-section">Rechercher</a>
+                <a href="#footer">Contact</a>
+                <div class="nav-actions">
+                    <button id="export-json-btn" class="nav-btn" style="display: none;"><i class="fas fa-file-export"></i> Exporter</button>
+                    <button id="theme-switcher" title="Changer de thème"><i class="fas fa-sun"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="upload-section">
+            <h1>Bienvenue dans votre Bibliothèque</h1>
+            <p>Chargez la bibliothèque principale ou importez votre propre fichier JSON.</p>
+            <div class="upload-options">
+                <button id="load-default-btn" class="upload-btn"><i class="fas fa-database"></i> Charger la Bibliothèque Principale</button>
+                <button id="import-other-btn" class="upload-btn"><i class="fas fa-file-upload"></i> Importer un autre fichier</button>
+            </div>
+            <input type="file" id="json-upload" accept=".json" style="display: none;">
+        </section>
+
+        <section id="main-content">
+            <div class="controls-section">
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Rechercher une ressource par titre, catégorie...">
+                    <button id="clear-search-btn" title="Effacer la recherche">×</button>
+                </div>
+            </div>
+            <div id="resource-container"></div>
+        </section>
+    </main>
+
+    <footer class="super-footer" id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>À Propos de FormationHUB</h4>
+                    <p>Une bibliothèque dynamique pour centraliser et rendre accessibles des ressources éducatives. Notre mission est de simplifier l'accès au savoir.</p>
+                </div>
+                 <div class="footer-column">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><i class="fas fa-home"></i> <a href="#">Accueil</a></li>
+                        <li><i class="fas fa-search"></i> <a href="#search-section">Rechercher</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="#footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/2250595762779" target="_blank">+225 05 95 76 27 79</a></li>
+                        <li><i class="fab fa-telegram"></i><a href="https://t.me/jokersmiler" target="_blank">@jokersmiler</a></li>
+                        <li><i class="fas fa-envelope"></i><a href="mailto:jadsh@gmail.com">jadsh@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 - FormationHUB. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let allResources = [];
+        const container = document.getElementById('resource-container');
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+        const loadDefaultBtn = document.getElementById('load-default-btn');
+        const importOtherBtn = document.getElementById('import-other-btn');
+        const jsonUpload = document.getElementById('json-upload');
+        const uploadSection = document.getElementById('upload-section');
+        const mainContent = document.getElementById('main-content');
+        const exportBtn = document.getElementById('export-json-btn');
+        
+        const categoryKeywords = {
+            'Design & Média': ['design', 'graphisme', 'montage video', 'mixage audio', 'illustrator', 'indesign', 'photoshop', 'montage vidéo', 'cinema 4d', 'xd', 'coreldraw', 'davinci resolve', 'photographie'],
+            'Business': ['marketing', 'ecommerce', 'business', 'vente', 'stratégie', 'freelance', 'shopify', 'vinted', 'référencement', 'print on demand', 'communauté', 'tiktok', 'instagram', 'certifications', 'tunnels de ventes', 'discord', 'woocommerce', 'contenu quotidien', 'pricing', 'veille', 'amazon fba', 'cv', 'management', 'whatsapp', 'analytics', 'publicité', 'mailchimp', 'google ads', '5euros', 'copywriting', 'dropshipping', 'clickfunnel'],
+            'IA': ['ia', 'chatgpt', 'prompt engineering', 'génératives', 'midjourney', 'github copilot', 'openai', 'bard', 'dall-e'],
+            'Développement Personnel': ['art oratoire', 'parole en public', 'charisme', 'confiance en soi', 'développement personnel', 'psychologie', 'livres audios', 'eloquence', 'manipulation', 'stress'],
+            'Langues': ['anglais', 'allemand', 'chinois', 'espagnol', 'ielts', 'toeic', 'traduction'],
+            'Bureautique': ['bureautique', 'excel', 'word', 'powerpoint', 'outlook', 'microsoft office', 'access', 'windows'],
+            'Finance & Comptabilité': ['comptabilité', 'sage', 'gestion de projet', 'pmp', 'cpm', 'git', 'github', 'agile', 'scrum', 'kanban', 'business plan', 'ms project'],
+            'Cybersécurité & Hacking': ['cybersecurite', 'hacker', 'hacking', 'kali linux', 'piratage', 'dark web', 'openssl', 'certificat ssl', 'metasploit', 'ingénierie sociale', 'mots de passe', 'wifi'],
+            'Data Science': ['data analyst', 'data science', 'analyse de données', 'python', 'sql', 'langage r', 'numpy', 'pandas', 'matplotlib', 'power bi'],
+            'Développement Web': ['developpement web', 'full-stack', 'bootcamp', 'html', 'css', 'js', 'react', 'logiciel', 'java', 'javascript', 'visual studio code', 'laravel', 'flutter', 'c++', 'angular', 'docker', 'webdesign', 'wordpress'],
+            'Logiciel': ['logiciels', 'fl studio'],
+            'Ressources Bonus': ['bonus', 'templates', 'transitions', 'telegram']
+        };
+
+        const subCategoryKeywords = {
+            'Adobe': ['photoshop', 'illustrator', 'indesign', 'xd', 'premiere pro', 'after effects'],
+            'MAO': ['fl studio', 'mao', 'beat'],
+        };
+
+        const assignCategory = (title) => {
+            const lowerTitle = title.toLowerCase();
+            for (const category in categoryKeywords) {
+                for (const keyword of categoryKeywords[category]) {
+                    if (lowerTitle.includes(keyword)) {
+                        for (const subcategory in subCategoryKeywords) {
+                             for (const subKeyword of subCategoryKeywords[subcategory]) {
+                                if (lowerTitle.includes(subKeyword)) {
+                                    return { category, subcategory };
+                                }
+                             }
+                        }
+                        return { category, subcategory: 'Général' };
+                    }
+                }
+            }
+            return { category: 'Divers', subcategory: 'Non Classé' };
+        };
+        
+        const renderAll = (filter = '') => {
+            container.innerHTML = '';
+            const searchTerm = filter.toLowerCase();
+
+            const filteredData = allResources.filter(r => 
+                r.text.toLowerCase().includes(searchTerm) || 
+                r.categoryInfo.category.toLowerCase().includes(searchTerm) ||
+                (r.categoryInfo.subcategory && r.categoryInfo.subcategory.toLowerCase().includes(searchTerm))
+            );
+            
+            const grouped = filteredData.reduce((acc, resource) => {
+                const { category, subcategory } = resource.categoryInfo;
+                if (!acc[category]) acc[category] = {};
+                const sub = subcategory || 'Général';
+                if (!acc[category][sub]) acc[category][sub] = [];
+                acc[category][sub].push(resource);
+                return acc;
+            }, {});
+            
+            let hasResults = false;
+            for (const category in grouped) {
+                hasResults = true;
+                const categoryContainer = document.createElement('div');
+                const categoryCount = Object.values(grouped[category]).reduce((sum, items) => sum + items.length, 0);
+                categoryContainer.innerHTML = `<h2 class="main-category-title">${category} <span class="count-badge">${categoryCount}</span></h2>`;
+                
+                for (const subcategory in grouped[category]) {
+                    const subCategoryContainer = document.createElement('section');
+                    const subCategoryCount = grouped[category][subcategory].length;
+                    subCategoryContainer.innerHTML = `<h3 class="sub-category-title">${subcategory} <span class="count-badge">${subCategoryCount}</span></h3>`;
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'resource-grid';
+                    
+                    grouped[category][subcategory].forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'resource-card';
+                        card.innerHTML = `
+                            <div class="card-header"><h3>${item.text}</h3></div>
+                            <div class="card-footer">
+                                <button class="card-btn copy-btn" data-url="${item.url}"><i class="fas fa-copy"></i> Copier</button>
+                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="card-btn open-link"><i class="fas fa-external-link-alt"></i> Ouvrir</a>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    
+                    subCategoryContainer.appendChild(grid);
+                    categoryContainer.appendChild(subCategoryContainer);
+                }
+                container.appendChild(categoryContainer);
+            }
+
+            if (!hasResults) {
+                 container.innerHTML = '<p style="text-align:center; padding: 2rem;">Aucun résultat trouvé pour votre recherche.</p>';
+            }
+        };
+
+        const processAndDisplayData = (data) => {
+            allResources = data.map(item => ({
+                ...item,
+                categoryInfo: assignCategory(item.text)
+            }));
+            uploadSection.style.display = 'none';
+            mainContent.style.display = 'block';
+            exportBtn.style.display = 'inline-block';
+            renderAll();
+        };
+
+        loadDefaultBtn.addEventListener('click', () => {
+            fetch('JsonPack2025.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Le fichier JsonPack2025.json est introuvable. Assurez-vous qu'il est dans le même dossier que ce fichier HTML.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    processAndDisplayData(data);
+                })
+                .catch(error => {
+                    alert(`Erreur : ${error.message}`);
+                });
+        });
+
+        importOtherBtn.addEventListener('click', () => jsonUpload.click());
+        jsonUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        processAndDisplayData(data);
+                    } catch (err) {
+                        alert("Erreur : Le fichier sélectionné n'est pas un JSON valide.");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+        
+        searchInput.addEventListener('input', (e) => {
+            renderAll(e.target.value);
+            clearSearchBtn.style.display = e.target.value ? 'block' : 'none';
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.style.display = 'none';
+            renderAll();
+        });
+        
+        container.addEventListener('click', (e) => {
+            const copyBtn = e.target.closest('.copy-btn');
+            if (copyBtn) {
+                navigator.clipboard.writeText(copyBtn.dataset.url).then(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copié !';
+                    setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copier'; }, 2000);
+                });
+            }
+        });
+
+        exportBtn.addEventListener('click', () => {
+            if (allResources.length === 0) {
+                alert("Aucune donnée à exporter.");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allResources, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "bibliotheque_exportee.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        });
+
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const themes = ['theme-light', 'theme-dark', 'theme-hacker'];
+        const themeIcons = ['fa-sun', 'fa-moon', 'fa-terminal'];
+        let currentThemeIndex = 0;
+
+        const applyTheme = (index) => {
+            document.body.classList.remove(...themes);
+            document.body.classList.add(themes[index]);
+            themeSwitcher.innerHTML = `<i class="fas ${themeIcons[index]}"></i>`;
+            localStorage.setItem('selectedTheme', themes[index]);
+            currentThemeIndex = index;
+        };
+
+        themeSwitcher.addEventListener('click', () => applyTheme((currentThemeIndex + 1) % themes.length));
+        
+        const savedTheme = localStorage.getItem('selectedTheme');
+        if (savedTheme) {
+            const savedIndex = themes.indexOf(savedTheme);
+            if (savedIndex !== -1) applyTheme(savedIndex);
+        } else {
+            applyTheme(0);
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV | Toure Dibegnon Junior | Développeur d'Applications</title>
+    
+    <!-- Meta Tags -->
+    <meta property="og:title" content="🔥 Mon CV - Développeur d'Applications Junior" />
+    <meta property="og:description" content="Découvrez mon parcours, mes compétences et mes projets en tant que développeur web passionné." />
+    <meta property="og:image" content="https://ibb.co/kVs1kWd1" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://liferenew70.github.io/CV-Junior/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./favi/favicon.ico" type="image/x-icon">
+
+    <style>
+        /* === CONFIGURATION GLOBALE & VARIABLES CSS === */
+        :root {
+            --accent: #8B5CF6; --accent-light: #A78BFA; --accent-dark: #6D28D9;
+            --bg-dark: #111827; --surface-dark: #1F2937; --text-primary-dark: #F9FAFB; --text-secondary-dark: #9CA3AF;
+            --bg-light: #F9FAFB; --surface-light: #FFFFFF; --text-primary-light: #1F2937; --text-secondary-light: #4B5563;
+            --bg: var(--bg-dark); --surface: var(--surface-dark); --text-primary: var(--text-primary-dark); --text-secondary: var(--text-secondary-dark);
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        /* === RESET & STYLES DE BASE === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--text-secondary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.light-mode {
+            --bg: var(--bg-light); --surface: var(--surface-light);
+            --text-primary: var(--text-primary-light); --text-secondary: var(--text-secondary-light);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 6rem 0; }
+        .section-title { text-align: center; font-size: 2.5rem; color: var(--text-primary); margin-bottom: 4rem; font-weight: 700; }
+        .section-title span { color: var(--accent); }
+
+        /* === HEADER === */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1rem 0; z-index: 1000;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        header.scrolled { background-color: var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .logo span { color: var(--accent); }
+        nav ul { display: flex; list-style: none; gap: 1.5rem; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: var(--accent); }
+        .nav-actions { display: flex; align-items: center; gap: 1rem; }
+        .btn-portfolio {
+            font-size: 0.9rem; padding: 0.5rem 1rem; background: transparent;
+            border: 2px solid var(--accent); color: var(--accent); border-radius: 50px;
+            text-decoration: none; font-weight: 600; transition: all 0.3s ease;
+        }
+        .btn-portfolio:hover { background-color: var(--accent); color: var(--surface); }
+        #theme-switcher { background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem; transition: color 0.3s; }
+        #theme-switcher:hover { color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* === SECTION HERO === */
+        .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+        .hero .container { display: flex; align-items: center; justify-content: space-between; gap: 4rem; }
+        .hero-content { flex-basis: 50%; }
+        .hero-content h1 { font-size: 3rem; color: var(--text-primary); margin-bottom: 1rem; }
+        .hero-content h1 span { display: block; font-size: 1.5rem; color: var(--text-secondary); font-weight: 400; }
+        .hero-content h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 1.5rem; font-weight: 600; }
+        .hero-content p { margin-bottom: 2rem; max-width: 500px; }
+        .hero-buttons { display: flex; gap: 1rem; }
+        .btn-primary { background: var(--accent); color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; }
+        .btn-primary:hover { background: var(--accent-dark); }
+        .btn-secondary { background: var(--surface); color: var(--text-primary); padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .btn-secondary:hover { transform: translateY(-3px); }
+
+        .hero-image {
+            flex-basis: 40%;
+            min-width: 300px;
+            text-align: center;
+        }
+        .hero-image img {
+            max-width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+            border: 4px solid var(--surface);
+            transition: transform 0.3s ease;
+        }
+        .hero-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ... (Le reste du CSS reste identique) ... */
+        #about .about-content { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; }
+        .about-text h3 { font-size: 1.8rem; color: var(--text-primary); margin-bottom: 1.5rem; }
+        .personal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+        .personal-info div span { font-weight: 600; color: var(--text-primary); }
+        .timeline { position: relative; padding-left: 2rem; border-left: 2px solid var(--accent); }
+        .timeline-item { margin-bottom: 2rem; position: relative; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-item::before { content: ''; width: 15px; height: 15px; background-color: var(--accent); border-radius: 50%; position: absolute; left: -2.8rem; top: 0.2rem; }
+        .timeline-date { font-weight: 600; color: var(--accent-light); margin-bottom: 0.5rem; }
+        .timeline-content h4 { color: var(--text-primary); margin-bottom: 0.2rem; }
+        #experience .experience-container { display: flex; flex-direction: column; gap: 2rem; }
+        .experience-item { background-color: var(--surface); padding: 2rem; border-radius: 12px; border-left: 4px solid var(--accent); }
+        .experience-header { margin-bottom: 1rem; }
+        .experience-header h3 { font-size: 1.3rem; color: var(--text-primary); }
+        .experience-header span { color: var(--accent-light); font-weight: 500; }
+        #skills .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+        .skill-category h3 { font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
+        .skill-item { margin-bottom: 1.5rem; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .progress-bar { width: 100%; height: 8px; background-color: var(--surface); border-radius: 5px; overflow: hidden; }
+        .progress { height: 100%; background: linear-gradient(90deg, var(--accent-light), var(--accent)); border-radius: 5px; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .skill-tags span { background-color: var(--surface); padding: 0.5rem 1rem; border-radius: 50px; font-weight: 500; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .grid-item { background-color: var(--surface); padding: 2rem; border-radius: 12px; text-align: center; }
+        .grid-item i { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .grid-item span { font-size: 1.2rem; color: var(--text-primary); font-weight: 600; }
+        #contact .contact-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem; background-color: var(--surface); padding: 3rem; border-radius: 12px; }
+        .contact-info h3, .contact-form h3 { font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem; }
+        .info-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .info-item i { color: var(--accent); font-size: 1.2rem; margin-top: 0.2rem; }
+        .whatsapp-btn { display: inline-flex; align-items: center; gap: 0.5rem; background-color: #25D366; color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; margin-top: 1rem; transition: background-color 0.3s; }
+        .whatsapp-btn:hover { background-color: #1DAA52; }
+        .form-group { margin-bottom: 1.5rem; }
+        #contactForm input, #contactForm textarea { width: 100%; padding: 0.8rem; border-radius: 8px; border: 2px solid transparent; background-color: var(--bg); color: var(--text-primary); font-family: var(--font-main); transition: border-color 0.3s; }
+        #contactForm input:focus, #contactForm textarea:focus { outline: none; border-color: var(--accent); }
+        .btn-submit { width: 100%; border: none; padding: 1rem; border-radius: 8px; background: linear-gradient(90deg, var(--accent-light), var(--accent-dark)); color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
+        .btn-submit i { margin-right: 0.5rem; }
+        footer { background-color: var(--surface); color: var(--text-secondary); padding: 4rem 2rem 2rem; margin-top: 6rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .footer-column h4 { color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem; }
+        .footer-column p, .footer-column a { color: var(--text-secondary); text-decoration: none; margin-bottom: 0.5rem; display: block; transition: color 0.3s ease; }
+        .footer-column a:hover { color: var(--accent); }
+        .footer-social-links { display: flex; gap: 1rem; }
+        .footer-social-links a { display: inline-block; width: 24px; height: 24px; }
+        .footer-social-links svg { fill: var(--text-secondary); transition: fill 0.3s ease; }
+        .footer-social-links a:hover svg { fill: var(--accent); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid var(--bg); }
+        .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 40px; height: 40px; background-color: var(--accent); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { transform: translateY(-5px); }
+        @media (max-width: 992px) {
+            nav ul { display: none; } .menu-toggle { display: block; }
+            .hero .container { flex-direction: column-reverse; text-align: center; }
+            .hero-content { flex-basis: 100%; } .hero-image { flex-basis: 100%; margin-top: 3rem; }
+            #about .about-content { grid-template-columns: 1fr; }
+            #contact .contact-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">Junior<span>Dev.</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Accueil</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#experience">Expérience</a></li>
+                    <li><a href="#skills">Compétences</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <a href="../TousMesSites/index.html" target="_blank" class="btn-portfolio">Voir mon Portfolio</a>
+                <button id="theme-switcher" title="Changer le thème">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ... (Toutes les sections restent identiques SAUF le formulaire de contact) ... -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content"><h1>Bonjour, je suis <span>Toure Dibegnon Junior Armel</span></h1><h2>Développeur d'Applications & Designer</h2><p>Je transforme des idées en solutions numériques fonctionnelles et esthétiques. Passionné par l'apprentissage continu et l'innovation technologique.</p><div class="hero-buttons"><a href="#contact" class="btn-primary">Me contacter</a><a href="assets/JuniorCvTg.pdf" download class="btn-secondary">Télécharger mon CV</a></div></div>
+                <div class="hero-image"><img src="assets/sitePP.jpg" alt="Photo de Toure Dibegnon Junior"></div>
+            </div>
+        </section>
+        <section id="about" class="about" style="background-color: var(--surface);"><div class="container"><h2 class="section-title">À <span>propos</span> de moi</h2><div class="about-content"><div class="about-text"><h3>Objectif Professionnel</h3><p>Étudiant en Informatique, apprenant en Développement d'Applications à l'école ES2I, je suis un chercheur autodidacte passionné par la technologie. Je recherche une opportunité au sein d'une équipe dynamique pour mettre en pratique mes connaissances et développer mes compétences techniques. Curieux, créatif et motivé, je souhaite contribuer à des projets innovants tout en apprenant dans un environnement stimulant.</p><div class="personal-info"><div><span>Date de Naissance :</span><p>28 Janvier 2006</p></div><div><span>Nationalité :</span><p>Ivoirienne</p></div><div><span>Adresse :</span><p>Abidjan, Yopougon</p></div><div><span>Statut :</span><p>Célibataire</p></div></div></div><div class="education"><h3>Formation & Diplômes</h3><div class="timeline"><div class="timeline-item"><div class="timeline-date">En cours</div><div class="timeline-content"><h4>Informatique Développeur d'Application (IDA)</h4><p>ES2I, au Plateau</p></div></div><div class="timeline-item"><div class="timeline-date">2023 - 2024</div><div class="timeline-content"><h4>Baccalauréat (BAC) série D</h4><p>A l'École William Ponty de Yopougon</p></div></div><div class="timeline-item"><div class="timeline-date">2019 - 2020</div><div class="timeline-content"><h4>BEPC</h4><p>Au Collège Marie Blanche, d'Abobo</p></div></div><div class="timeline-item"><div class="timeline-date">2015 - 2016</div><div class="timeline-content"><h4>CEPE</h4><p>A l'École Saint Dominique, d'Abobo</p></div></div></div></div></div></div></section>
+        <section id="experience" class="experience"><div class="container"><h2 class="section-title">Mon <span>Expérience</span></h2><div class="experience-container"><div class="experience-item"><div class="experience-header"><h3>Créateur de Graphiques sur Canva</h3><span>Auto-entrepreneur</span></div><p>Conception d'affiches pour des événements et supports de communication, avec une bonne maîtrise du design graphique digital.</p></div><div class="experience-item"><div class="experience-header"><h3>Développeur Autodidacte</h3><span>Projet Personnel</span></div><p>Création d'un cyber café pendant les vacances, fournissant une assistance informatique pour résoudre des problèmes techniques et offrant des conseils pratiques.</p></div><div class="experience-item"><div class="experience-header"><h3>Gestion de Magasin avec Excel</h3><span>Projet Personnel</span></div><p>Création d'une feuille de calcul Excel pour gérer la caisse d'un magasin afin de connaître automatiquement ses bénéfices, pertes, capital et comptes.</p></div></div></div></section>
+        <section id="skills" class="skills" style="background-color: var(--surface);"><div class="container"><h2 class="section-title">Mes <span>compétences</span></h2><div class="skills-container"><div class="skill-category"><h3>Développement & Outils</h3><div class="skill-item"><div class="skill-info"><span>HTML5 & CSS3</span><span>90%</span></div><div class="progress-bar"><div class="progress" style="width: 90%"></div></div></div><div class="skill-item"><div class="skill-info"><span>JavaScript (Client-side)</span><span>75%</span></div><div class="progress-bar"><div class="progress" style="width: 75%"></div></div></div><div class="skill-item"><div class="skill-info"><span>Suite Microsoft Office (Word, Excel)</span><span>90%</span></div><div class="progress-bar"><div class="progress" style="width: 90%"></div></div></div><div class="skill-item"><div class="skill-info"><span>Git & GitHub</span><span>70%</span></div><div class="progress-bar"><div class="progress" style="width: 70%"></div></div></div></div><div class="skill-category"><h3>Design</h3><div class="skill-item"><div class="skill-info"><span>Canva (Design Graphique)</span><span>85%</span></div><div class="progress-bar"><div class="progress" style="width: 85%"></div></div></div><div class="skill-item"><div class="skill-info"><span>Conception d'affiches et supports</span><span>90%</span></div><div class="progress-bar"><div class="progress" style="width: 90%"></div></div></div><div class="skill-item"><div class="skill-info"><span>UI/UX Design (Principes)</span><span>70%</span></div><div class="progress-bar"><div class="progress" style="width: 70%"></div></div></div></div><div class="skill-category"><h3>Compétences Transversales</h3><div class="skill-tags"><span>Adaptabilité</span> <span>Apprentissage continu</span> <span>Esprit d'analyse</span> <span>Aisance orale et écrite</span> <span>Gestion d'équipe</span> <span>Sens de l'initiative</span> <span>Ouverture d'esprit</span> <span>Sens des responsabilités</span></div></div></div></div></section>
+        <section id="langues" class="langues"><div class="container"><h2 class="section-title"><span>Langues</span> Maîtrisées</h2><div class="grid-container"><div class="grid-item"><span>Français</span></div><div class="grid-item"><span>Anglais</span></div><div class="grid-item"><span>Allemand</span></div><div class="grid-item"><span>Tagbanan</span></div></div></div></section>
+        <section id="interests" class="interests" style="background-color: var(--surface);"><div class="container"><h2 class="section-title">Centres <span>d'Intérêt</span></h2><div class="grid-container"><div class="grid-item"><i class="fas fa-book"></i><span>Lecture</span></div><div class="grid-item"><i class="fas fa-running"></i><span>Sport</span></div><div class="grid-item"><i class="fas fa-microchip"></i><span>Nouvelles Technologies</span></div><div class="grid-item"><i class="fas fa-graduation-cap"></i><span>Apprentissage Autodidacte</span></div><div class="grid-item"><i class="fas fa-hands-helping"></i><span>Bénévolat</span></div><div class="grid-item"><i class="fas fa-users"></i><span>Communauté & Collaboration</span></div></div></div></section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">Me <span>contacter</span></h2>
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <h3>Informations</h3>
+                        <p>Je suis ouvert à toute proposition de stage, collaboration ou projet. N'hésitez pas à me contacter.</p>
+                        <div class="info-item"><i class="fas fa-envelope"></i><div><h4>Email</h4><p>touredibegnonjuniorarmel@gmail.com</p></div></div>
+                        <div class="info-item"><i class="fas fa-phone"></i><div><h4>Téléphone</h4><p>(+225) 0719030672</p></div></div>
+                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><h4>Adresse</h4><p>Abidjan, Yopougon</p></div></div>
+                        <a href="https://wa.me/+2250719030672" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Discuter sur WhatsApp</a>
+                    </div>
+                    <div class="contact-form">
+                        <h3>Envoyez-moi un message</h3>
+                        <!-- FORMULAIRE MODIFIÉ -->
+                        <form id="contactForm">
+                            <div class="form-group"><input type="text" id="name" placeholder="Votre nom" required></div>
+                            <div class="form-group"><input type="email" id="email" placeholder="Votre email" required></div>
+                            <div class="form-group"><input type="text" id="subject" placeholder="Sujet" required></div>
+                            <div class="form-group"><textarea id="message" rows="5" placeholder="Votre message" required></textarea></div>
+                            <!-- BOUTON MODIFIÉ -->
+                            <button type="button" class="btn-submit" onclick="envoyerMessageWhatsApp()">
+                                <i class="fas fa-paper-plane"></i>Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- ... (Le footer reste identique) ... -->
+        <div class="container"><div class="footer-grid"><div class="footer-column"><h4>Toure D. Junior</h4><p>Développeur d'applications passionné par la création de solutions numériques fonctionnelles et esthétiques.</p></div><div class="footer-column"><h4>Liens Rapides</h4><a href="#home">Accueil</a><a href="#about">À propos</a><a href="#experience">Expérience</a><a href="#skills">Compétences</a><a href="#contact">Contact</a></div><div class="footer-column"><h4>Contact & Réseaux</h4><a href="mailto:touredibegnonjuniorarmel@gmail.com">Mon Email</a><div class="footer-social-links"><a href="https://wa.me/+2250719030672" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99 0-3.903-.52-5.586-1.459l-6.354 1.654zm6.837-5.927c.433.165 1.024.375 1.524.638.787.398 1.625.62 2.498.621 5.438 0 9.875-4.438 9.875-9.875 0-5.437-4.438-9.875-9.875-9.875s-9.875 4.438-9.875 9.875c0 1.906.54 3.719 1.581 5.258l.41.635-1.055 3.853 3.952-1.076z"/></svg></a><a href="https://github.com/liferenew70" target="_blank" title="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></div></div></div><div class="footer-bottom"><p>© 2025 Toure Dibegnon Junior Armel. Tous droits réservés.</p></div></div>
+    </footer>
+
+    <a href="#home" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+    <script>
+    // --- NOUVELLE FONCTION POUR WHATSAPP ---
+    function envoyerMessageWhatsApp() {
+        const nom = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const sujet = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // Validation simple
+        if (!nom || !email || !sujet || !message) {
+            alert("Veuillez remplir tous les champs du formulaire.");
+            return;
+        }
+
+        // Votre numéro de téléphone au format international sans le '+' ou les '00'
+        const telephone = "2250719030672";
+
+        // Formatage du message
+        const texteWhatsApp = `Bonjour, je vous contacte via votre CV en ligne.\n\n*Nom :* ${nom}\n*Email :* ${email}\n*Sujet :* ${sujet}\n\n*Message :*\n${message}`;
+
+        // Encodage du message pour l'URL
+        const texteEncode = encodeURIComponent(texteWhatsApp);
+
+        // Création du lien WhatsApp
+        const lienWhatsApp = `https://wa.me/${telephone}?text=${texteEncode}`;
+
+        // Ouverture du lien dans une nouvelle fenêtre
+        window.open(lienWhatsApp, '_blank');
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const backToTopBtn = document.querySelector('.back-to-top');
+        const header = document.querySelector('header');
+        
+        const sunIcon = '<i class="fas fa-sun"></i>';
+        const moonIcon = '<i class="fas fa-moon"></i>';
+
+        const setTheme = (isLight) => {
+            document.body.classList.toggle('light-mode', isLight);
+            themeSwitcher.innerHTML = isLight ? moonIcon : sunIcon;
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        };
+
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            setTheme(savedTheme === 'light');
+        } else {
+            setTheme(!prefersDark);
+        }
+
+        themeSwitcher.addEventListener('click', () => {
+            setTheme(!document.body.classList.contains('light-mode'));
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+                backToTopBtn.classList.add('visible');
+            } else {
+                header.classList.remove('scrolled');
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+Absolument. C'est une question essentielle. Savoir où modifier les informations clés est fondamental pour gérer votre site au quotidien.
+
+Voici un résumé de toutes les données de configuration "sensibles" ou importantes, où les trouver et ce que vous devez en faire.
+
+Toutes ces informations se trouvent au début de votre fichier js/app.js.
+
+Résumé des Données Sensibles et de Configuration
+1. Mot de Passe Administrateur
+
+C'est la donnée la plus critique. Elle protège l'accès à votre tableau de bord.
+
+Où le trouver : Dans js/app.js, à la ligne :
+
+Generated javascript
+const ADMIN_PASSWORD = "admin";
+
+
+Action Requise : Vous devez absolument changer "admin" par un mot de passe complexe que vous seul connaissez. Par exemple : const ADMIN_PASSWORD = "MonMotDePasseSuperSecret2025!";
+
+2. Codes Promotionnels
+
+Ce sont les codes que vos clients peuvent utiliser dans leur panier pour obtenir une réduction.
+
+Où les trouver : Dans js/app.js, c'est l'objet PROMO_CODES :
+
+Generated javascript
+const PROMO_CODES = {
+    "FIRST_PROMO": { type: "percent", value: 25, conditions: { firstPurchaseOnly: true } },
+    "MONDAY_PROMO": { type: "percent", value: 10, conditions: { onlyOnDay: "monday" } },
+    "MONTH_PROMO": { type: "percent", value: 15, conditions: { onlyOnDay: "firstOfMonth" } },
+    "THREE_ITEMS_PROMO": { type: "fixed", value: 500, conditions: { minItems: 3 } }
+};
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+JavaScript
+IGNORE_WHEN_COPYING_END
+
+Comment les gérer :
+
+Pour modifier un code, changez sa valeur. Par exemple, pour que THREE_ITEMS_PROMO donne 1000 FCFA de réduction, changez value: 500 en value: 1000.
+
+Pour ajouter un nouveau code, ajoutez une nouvelle ligne. Par exemple, pour un code "NOEL20" qui donne 20% de réduction :
+
+Generated javascript
+"NOEL20": { type: "percent", value: 20, conditions: {} },
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+JavaScript
+IGNORE_WHEN_COPYING_END
+
+Pour supprimer un code, supprimez simplement sa ligne.
+
+3. Votre Numéro de Contact WhatsApp
+
+C'est le numéro utilisé pour les paiements manuels et pour le support client.
+
+Où le trouver : Dans js/app.js, à la ligne :
+
+Generated javascript
+const WHATSAPP_NUMBER = "+2250595762779";
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+JavaScript
+IGNORE_WHEN_COPYING_END
+
+Action Requise : Vérifiez que c'est bien votre numéro de contact professionnel, avec l'indicatif du pays.
+
+4. Le "Cœur" de votre boutique : Les Formations
+
+Ce n'est pas une donnée "sensible" en termes de sécurité, mais c'est la plus importante pour votre activité. C'est ici que vous gérez tout votre catalogue de produits.
+
+Où le trouver : Dans js/app.js, c'est le grand objet PRODUCTS tout en haut du fichier.
+
+Generated javascript
+const PRODUCTS = {
+    capcut: { /* ...détails de la formation CapCut... */ },
+    iaprompt: { /* ...détails de la formation IA... */ }
+    // C'est ici que vous ajouterez vos futures formations
+};
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+JavaScript
+IGNORE_WHEN_COPYING_END
+
+Action Requise : Lorsque vous voudrez ajouter, modifier ou supprimer une formation, c'est cet objet que vous devrez éditer en respectant scrupuleusement le format de chaque produit.
+
+Avertissement de Sécurité Très Important
+
+Puisque votre site est entièrement statique (HTML, CSS, JS), toutes ces informations, y compris le mot de passe admin et les codes promo, sont visibles dans le code source si un utilisateur sait où chercher.
+
+Pour le mot de passe admin : C'est une sécurité de base qui empêchera 99% des gens d'accéder à votre page admin. C'est suffisant pour commencer.
+
+Pour les codes promo : Un client techniquement averti pourrait trouver la liste de tous vos codes promo en regardant le fichier app.js.
+
+C'est la limite d'un site sans backend (serveur). Pour démarrer, c'est tout à fait acceptable. Mais si votre site grandit et que la sécurité devient une priorité absolue, la prochaine grande étape dans votre parcours de développeur sera d'apprendre un langage backend (comme Node.js ou PHP) pour cacher toute cette logique côté serveur.
+
+Vous avez maintenant toutes les clés en main pour gérer votre site de manière autonome. Félicitations encore une fois pour ce projet
