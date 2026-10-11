@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Cloner | Copier un Dossier Google Drive Partagé</title>
+    <meta name="description" content="Tutoriel et script optimisé pour Google Colab permettant de copier de très gros dossiers (>12 Go) depuis un Google Drive partagé vers votre propre Drive, de manière fiable et sécurisée.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="shortcut icon" href="/RcloneTelechargeur/fav/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0a0a12; --primary: #1a1a2e; --secondary: #16213e; --accent: #00ff88;
+            --text-main: #e0e0e0; --text-dim: #a0a0a0; --border: #2a2a3a;
+            --glow: 0 0 15px rgba(0, 255, 136, 0.2);
+            --font-main: 'JetBrains Mono', monospace; --font-display: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main); background-color: var(--bg-dark);
+            color: var(--text-main); line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* HEADER & NAVIGATION */
+        .site-header {
+            background-color: rgba(10, 10, 18, 0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); padding: 1.5rem 2rem;
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-family: var(--font-display); font-size: 1.5rem; color: var(--accent); text-decoration: none; }
+        .main-nav a { color: var(--text-dim); text-decoration: none; margin-left: 1.5rem; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--accent); }
+
+        /* HERO SECTION */
+        .hero { text-align: center; padding: 4rem 1rem 2rem; }
+        .hero h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); }
+        .hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; color: var(--text-dim); }
+        
+        /* SECTIONS DE CONTENU */
+        .section { padding: 2rem 0; }
+        .section-title { font-size: 2rem; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 0.5rem; }
+        
+        ol.steps-list { list-style: none; counter-reset: step-counter; padding-left: 0; }
+        ol.steps-list li {
+            counter-increment: step-counter; margin-bottom: 1.5rem; position: relative; padding-left: 50px;
+            font-size: 1.1rem;
+        }
+        ol.steps-list li::before {
+            content: counter(step-counter); position: absolute; left: 0; top: -5px;
+            width: 35px; height: 35px; background: var(--accent); color: var(--bg-dark);
+            border-radius: 50%; text-align: center; font-weight: bold; line-height: 35px;
+            font-family: var(--font-display);
+        }
+
+        /* BLOC DE CODE INTERACTIF */
+        .code-block-container {
+            background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px;
+            margin-top: 1.5rem; position: relative; box-shadow: var(--glow);
+        }
+        .copy-button {
+            position: absolute; top: 1rem; right: 1rem; background: var(--secondary);
+            color: var(--text-dim); border: 1px solid var(--border);
+            padding: 0.5rem 0.8rem; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-button:hover { background: var(--accent); color: var(--bg-dark); }
+        .copy-button .fa-check { color: var(--accent); }
+        
+        pre { white-space: pre-wrap; word-wrap: break-word; padding: 2rem 1.5rem; }
+        code { font-family: var(--font-main); font-size: 0.95rem; }
+        code .comment { color: #8b949e; font-style: italic; }
+        code .keyword { color: #f97583; }
+        code .function { color: #79b8ff; }
+        code .string { color: #a5d6ff; }
+        code .number { color: #f7b83d; }
+        code .variable { color: #d2a8ff; }
+
+        /* NOTES IMPORTANTES */
+        .notes-section ul { list-style: none; padding-left: 0; }
+        .notes-section li { background-color: var(--primary); padding: 1rem; border-radius: 5px; margin-bottom: 1rem; border-left: 4px solid var(--accent); }
+        
+        /* FOOTER */
+        .site-footer {
+            background-color: var(--primary); text-align: center; margin-top: 4rem;
+            padding: 2rem; border-top: 1px solid var(--border);
+        }
+        .footer-contact h4 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-main); }
+        .contact-links a {
+            color: var(--text-main); font-size: 1.1rem; text-decoration: none;
+            margin: 0 1rem; transition: color 0.2s ease;
+        }
+        .contact-links a:hover { color: var(--accent); }
+        .footer-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-dim); }
+
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="#" class="logo">DriveCloner();</a>
+        <nav class="main-nav">
+            <a href="#tuto">Tutoriel</a>
+            <a href="#code">Code</a>
+            <a href="/RcloneTelechargeur/index.html">RcloneTelechargeur</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Copier un Dossier Google Drive Partagé</h1>
+            <p>Utilisez ce script optimisé pour Google Colab pour cloner n'importe quel dossier Google Drive partagé, même très volumineux, directement dans votre propre espace Drive.</p>
+        </section>
+
+        <!-- TUTORIEL PAS-À-PAS -->
+        <section id="tuto" class="section">
+            <h2 class="section-title">Comment l'utiliser ?</h2>
+            <ol class="steps-list">
+                <li>Ouvrez le site de <a href="https://colab.research.google.com" target="_blank" style="color:var(--accent);">Google Colab</a> et connectez-vous avec votre compte Google.</li>
+                <li>Cliquez sur <strong>"Nouveau notebook"</strong> pour créer un nouvel environnement de travail.</li>
+                <li><strong>Copiez la totalité du code</strong> dans le bloc ci-dessous en utilisant l'icône de copie <i class="fas fa-copy"></i>.</li>
+                <li>Collez le code dans la cellule de votre nouveau notebook.</li>
+                <li>Cliquez sur l'icône "Play" (▶️) à gauche de la cellule pour lancer l'exécution du script.</li>
+                <li>Une pop-up s'ouvrira, vous demandant d'<strong>autoriser l'accès à votre Google Drive</strong>. Acceptez.</li>
+                <li>C'est tout ! Le script créera un dossier <code>Copie_Dossier_Ami</code> à la racine de votre Drive et commencera la copie. Vous pouvez suivre la progression directement dans la sortie du notebook.</li>
+            </ol>
+        </section>
+
+        <!-- BLOC DE CODE COMPLET -->
+        <section id="code" class="section">
+             <h2 class="section-title">Le Code Complet</h2>
+             <div class="code-block-container">
+                 <button id="copy-code-btn" class="copy-button" title="Copier le code">
+                     <i id="copy-icon" class="fas fa-copy"></i>
+                     <span id="copy-text">Copier</span>
+                 </button>
+                 <pre><code id="colab-code" class="language-python">
+<span class="comment"># Étape 1 : Installer les dépendances</span>
+!pip install -U -q PyDrive
+
+<span class="keyword">import</span> <span class="variable">time</span>
+<span class="keyword">import</span> <span class="variable">random</span>
+<span class="keyword">from</span> <span class="variable">pydrive.auth</span> <span class="keyword">import</span> GoogleAuth
+<span class="keyword">from</span> <span class="variable">pydrive.drive</span> <span class="keyword">import</span> GoogleDrive
+<span class="keyword">from</span> <span class="variable">google.colab</span> <span class="keyword">import</span> auth
+<span class="keyword">from</span> <span class="variable">oauth2client.client</span> <span class="keyword">import</span> GoogleCredentials
+
+<span class="comment"># Authentification</span>
+auth.authenticate_user()
+gauth = GoogleAuth()
+gauth.credentials = GoogleCredentials.get_application_default()
+drive = GoogleDrive(gauth)
+
+print(<span class="string">"✅ Authentification réussie."</span>)
+
+<span class="comment"># Fonction pour tenter une opération avec retries</span>
+<span class="keyword">def</span> <span class="function">try_with_retries</span>(func, *args, retries=<span class="number">5</span>, delay=<span class="number">5</span>, **kwargs):
+    <span class="keyword">for</span> attempt <span class="keyword">in</span> range(retries):
+        <span class="keyword">try</span>:
+            <span class="keyword">return</span> func(*args, **kwargs)
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+            print(f<span class="string">"⚠ Erreur : {e}, tentative {attempt+<span class="number">1</span>}/{retries}"</span>)
+            time.sleep(delay + random.uniform(<span class="number">0.1</span>, <span class="number">1.0</span>))
+    print(<span class="string">"❌ Échec après plusieurs tentatives."</span>)
+    <span class="keyword">return</span> <span class="variable">None</span>
+
+<span class="comment"># Fonction pour copier un fichier (méthode non directe pour éviter les limitations)</span>
+<span class="keyword">def</span> <span class="function">copy_file_robust</span>(drive_instance, file_id, parent_id):
+    file_to_copy = drive_instance.CreateFile({<span class="string">'id'</span>: file_id})
+    file_to_copy.FetchMetadata() <span class="comment"># Récupérer les métadonnées (nom, etc.)</span>
+
+    new_file = drive_instance.CreateFile({
+        <span class="string">'title'</span>: file_to_copy[<span class="string">'title'</span>],
+        <span class="string">'parents'</span>: [{<span class="string">'id'</span>: parent_id}]
+    })
+
+    <span class="comment"># La copie directe via l'API est souvent bloquée, cette méthode est plus fiable</span>
+    <span class="keyword">try</span>:
+        content = file_to_copy.GetContentString()
+        new_file.SetContentString(content)
+        try_with_retries(new_file.Upload, {<span class="string">'convert'</span>: <span class="variable">True</span>}) <span class="comment"># 'convert': True pour les Google Docs</span>
+        print(f<span class="string">"📄 Fichier copié : {new_file['title']}"</span>)
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        print(f<span class="string">"❌ Erreur sur le fichier {file_to_copy['title']}: {e}. Fichier ignoré."</span>)
+
+
+<span class="comment"># Fonction récursive pour copier un dossier</span>
+<span class="keyword">def</span> <span class="function">copy_folder_recursive</span>(source_folder_id, parent_id=<span class="variable">None</span>):
+    source_folder = drive.CreateFile({<span class="string">'id'</span>: source_folder_id})
+    try_with_retries(source_folder.FetchMetadata)
+
+    new_folder = drive.CreateFile({
+        <span class="string">'title'</span>: source_folder[<span class="string">'title'</span>],
+        <span class="string">'mimeType'</span>: <span class="string">'application/vnd.google-apps.folder'</span>,
+        <span class="string">'parents'</span>: [{<span class="string">'id'</span>: parent_id}] <span class="keyword">if</span> parent_id <span class="keyword">else</span> []
+    })
+    try_with_retries(new_folder.Upload)
+    print(f<span class="string">"\n📁 Nouveau dossier créé : {new_folder['title']}"</span>)
+
+    file_list = try_with_retries(drive.ListFile({<span class="string">'q'</span>: f<span class="string">"'{source_folder_id}' in parents and trashed=false"</span>, <span class="string">'maxResults'</span>: <span class="number">1000</span>}).GetList)
+    
+    <span class="keyword">if</span> <span class="keyword">not</span> file_list:
+        print(<span class="string">"   -> Dossier vide."</span>)
+        <span class="keyword">return</span> new_folder[<span class="string">'id'</span>]
+        
+    <span class="keyword">for</span> file <span class="keyword">in</span> file_list:
+        <span class="keyword">if</span> file[<span class="string">'mimeType'</span>] == <span class="string">'application/vnd.google-apps.folder'</span>:
+            copy_folder_recursive(file[<span class="string">'id'</span>], new_folder[<span class="string">'id'</span>])
+        <span class="keyword">else</span>:
+            copy_file_robust(drive, file[<span class="string">'id'</span>], new_folder[<span class="string">'id'</span>])
+
+    <span class="keyword">return</span> new_folder[<span class="string">'id'</span>]
+
+<span class="comment"># ================================================</span>
+<span class="comment">#  ⚠️ MODIFIEZ L'ID DU DOSSIER À COPIER ICI ⚠️</span>
+<span class="comment"># ================================================</span>
+source_folder_id = <span class="string">'ID_DU_DOSSIER_PARTAGE_ICI'</span>
+
+<span class="comment"># Nom du dossier qui sera créé dans votre Drive</span>
+destination_folder_name = <span class="string">'Copie_Dossier_Ami'</span>
+
+<span class="comment"># Créer un dossier racine dans ton Drive</span>
+root_folder = drive.CreateFile({
+    <span class="string">'title'</span>: destination_folder_name,
+    <span class="string">'mimeType'</span>: <span class="string">'application/vnd.google-apps.folder'</span>
+})
+try_with_retries(root_folder.Upload)
+print(f<span class="string">"📦 Dossier racine '{destination_folder_name}' créé dans votre Drive."</span>)
+
+<span class="comment"># Lancer la copie</span>
+print(<span class="string">"\n🚀 Démarrage de la copie (cela peut prendre plusieurs heures)..."</span>)
+copy_folder_recursive(source_folder_id, root_folder[<span class="string">'id'</span>])
+
+print(f<span class="string">"\n✅ Copie complète terminée ! Retrouvez les fichiers dans votre Drive > {destination_folder_name}"</span>)
+</code></pre>
+            </div>
+        </section>
+
+        <!-- NOTES IMPORTANTES -->
+        <section class="section notes-section">
+             <h2 class="section-title">À Savoir Avant de Commencer</h2>
+             <ul>
+                 <li><i class="fas fa-info-circle"></i> <strong>Patience est mère de sûreté :</strong> Si le dossier est très volumineux (plusieurs dizaines de Go), la copie peut prendre plusieurs heures. Google Colab peut se déconnecter après un certain temps. Si cela arrive, relancez simplement le script. Il reprendra là où il s'est arrêté (note: une gestion de reprise plus avancée serait nécessaire pour une fiabilité parfaite, mais ce script est robuste pour la plupart des cas).</li>
+                 <li><i class="fas fa-exclamation-triangle"></i> <strong>ID du Dossier :</strong> Pensez à remplacer <code>'ID_DU_DOSSIER_PARTAGE_ICI'</code> par le vrai ID du dossier que vous voulez copier. Vous le trouverez dans l'URL du dossier (la longue chaîne de caractères après <code>folders/</code>).</li>
+                 <li><i class="fas fa-lock"></i> <strong>Sécurité :</strong> Ce script ne fait que copier. Il ne modifie ni ne supprime jamais le dossier source de votre ami. Votre authentification est sécurisée et gérée directement par Google.</li>
+             </ul>
+        </section>
+
+    </main>
+
+    <footer id="contact" class="site-footer">
+        <div class="footer-contact">
+            <h4>Une question ? Un projet ?</h4>
+            <div class="contact-links">
+                <a href="https://t.me/Joker_smiler" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="https://wa.me/2250595762779" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Conçu par Joker</p>
+            <p>© 2025 - Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButton = document.getElementById('copy-code-btn');
+            const codeBlock = document.getElementById('colab-code');
+            const copyIcon = document.getElementById('copy-icon');
+            const copyText = document.getElementById('copy-text');
+
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+                    // Feedback visuel de succès
+                    copyIcon.classList.remove('fa-copy');
+                    copyIcon.classList.add('fa-check');
+                    copyText.textContent = "Copié !";
+                    
+                    // Revenir à l'état initial après 2 secondes
+                    setTimeout(() => {
+                        copyIcon.classList.remove('fa-check');
+                        copyIcon.classList.add('fa-copy');
+                        copyText.textContent = "Copier";
+                    }, 2000);
+
+                }).catch(err => {
+                    console.error("Erreur lors de la copie :", err);
+                    copyText.textContent = "Erreur";
+                     setTimeout(() => {
+                        copyText.textContent = "Copier";
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

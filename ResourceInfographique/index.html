@@ -95,7 +95,7 @@
             <a href="#" class="logo">FormationHUB</a>
             <nav class="main-nav">
                 <a href="#">Accueil</a>
-                <a href="#search-section">Rechercher</a>
+                <a href="#Precherche">Rechercher</a>
                 <a href="#footer">Contact</a>
                 <div class="nav-actions">
                     <button id="export-json-btn" class="nav-btn" style="display: none;"><i class="fas fa-file-export"></i> Exporter</button>
@@ -115,11 +115,13 @@
             </div>
             <input type="file" id="json-upload" accept=".json" style="display: none;">
         </section>
+        <span id="Precherche"></span>
 
         <section id="main-content">
             <div class="controls-section">
                 <div class="search-wrapper">
                     <i class="fas fa-search"></i>
+                    <!-- <p >Recherchez rapidement une ressource par son titre, catégorie ou sous-catégorie. <br> vous aurez accès au formation premium gogole drive depuis se site.</p> -->
                     <input type="text" id="search-input" placeholder="Rechercher une ressource par titre, catégorie...">
                     <button id="clear-search-btn" title="Effacer la recherche">×</button>
                 </div>
@@ -139,7 +141,9 @@
                     <h4>Navigation</h4>
                     <ul>
                         <li><i class="fas fa-home"></i> <a href="#">Accueil</a></li>
-                        <li><i class="fas fa-search"></i> <a href="#search-section">Rechercher</a></li>
+                        <li><i class="fas fa-search"></i> <a href="#Precherche">Rechercher</a></li>
+                        <li><i class="fas fa-file-pdf"></i> <a href="PACK-ULTIME-2025.pdf" download>Pack Ultime 2025</a></li>
+                        <li><i class="fas fa-file-pdf"></i> <a href="Biggst Bundle.pdf" download>Télécharger le PDF</a></li>
                         <li><i class="fas fa-envelope"></i> <a href="#footer">Contact</a></li>
                     </ul>
                 </div>
@@ -147,8 +151,8 @@
                     <h4>Contact</h4>
                     <ul>
                         <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/2250595762779" target="_blank">+225 05 95 76 27 79</a></li>
-                        <li><i class="fab fa-telegram"></i><a href="https://t.me/jokersmiler" target="_blank">@jokersmiler</a></li>
-                        <li><i class="fas fa-envelope"></i><a href="mailto:jadsh@gmail.com">jadsh@gmail.com</a></li>
+                        <li><i class="fab fa-telegram"></i><a href="https://t.me/joker_smiler" target="_blank">@joker_smiler</a></li>
+                        <li><i class="fas fa-envelope"></i><a href="mailto:jokersmiler67@gmail.com">jokersmiler67@gmail.com</a></li>
                     </ul>
                 </div>
             </div>
@@ -283,7 +287,7 @@
             fetch('JsonPack2025.json')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Le fichier JsonPack2025.json est introuvable. Assurez-vous qu'il est dans le même dossier que ce fichier HTML.");
+                        throw new Error("Le fichier JsonPack2025.json est introuvable.\n Contactez l'administrateur du site.\n sur télégram : @joker_smiler ou whatsapp : +225 05 95 76 27 79");
                     }
                     return response.json();
                 })
